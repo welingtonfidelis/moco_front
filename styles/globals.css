@@ -1,0 +1,48 @@
+@import url('~antd/dist/antd.css');
+
+:root {
+  font-size: 60%;
+}
+
+:root {
+  --color-background-light: #f0f0f7;
+  --color-background-dark: #0D0D0D;
+  --color-primary: #0511F2;
+  --color-secondary: #0583F2;
+  --color-title-primary: #038C7F;
+  --color-title-secondary: #1B7EA6;
+  --color-text-base: #6a6180;
+
+  font-size: 60%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100vh;
+}
+
+body {
+  background: var(--color-background-light);
+}
+
+/* #root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+body, input, button, textarea {
+  font: 500 1.6rem Roboto;
+  color: var(--color-text-base);
+}
+
+@media (min-width: 700px) {
+  :root {
+      font-size: 62.5%;
+  }
+}
