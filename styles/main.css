@@ -6,6 +6,11 @@
 
 #main-page header {
     background: var(--color-card-light);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
 }
 
 #main-page header img {

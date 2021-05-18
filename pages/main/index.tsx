@@ -1,19 +1,22 @@
 import { useState } from "react"
-import { Button, Menu } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
 import {
     HomeOutlined, DollarCircleOutlined,
     SnippetsOutlined, BarChartOutlined,
-    RightCircleOutlined, LeftCircleOutlined
+    RightCircleOutlined, LeftCircleOutlined, UserOutlined
 } from '@ant-design/icons';
 
 import HomePage from '../home';
 import CashRegisterPage from '../cash-register';
 import CashRegisterGroupPage from '../cash-register-group';
 import ReportPage from '../report';
+import Modal from "antd/lib/modal/Modal";
+import Router from "next/router";
 
 export default function Home() {
     const [selectedPage, setSelectedPage] = useState(HomePage);
     const [collapsedMenu, setCollapsedMenu] = useState(true);
+    const [showModalLogout, setShowModalLogout] = useState(false);
 
     const menuOptions = [
         {
@@ -58,10 +61,30 @@ export default function Home() {
         }
     }
 
+    const logout = () => {
+        setShowModalLogout(false);
+
+        Router.replace('/');
+    }
+
+    const userMenuOptions = (
+        <Menu>
+            <Menu.Item key="1" onClick={() => setShowModalLogout(true)}>
+                Sair do sistema
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <div id="main-page">
             <header>
                 <img src="/assets/images/logo_transparent.png" alt="Logo" />
+
+                <Dropdown overlay={userMenuOptions}>
+                    <Button shape="circle" >
+                        <UserOutlined />
+                    </Button>
+                </Dropdown>
             </header>
 
             <main >
@@ -73,7 +96,7 @@ export default function Home() {
                     {
                         menuOptions.map((item, index) => (
                             <Menu.Item
-                                key={index +1}
+                                key={index + 1}
                                 onClick={() => changePage(item.page)}
                                 icon={item.icon}
                             >
@@ -83,12 +106,12 @@ export default function Home() {
                     }
 
                     <div className="ant-menu-expand-button">
-                        <Button 
+                        <Button
                             onClick={() => setCollapsedMenu(!collapsedMenu)}
                             title={collapsedMenu ? 'Expandir menu' : 'Retrair menu'}
-                            shape="circle" 
-                            icon={collapsedMenu ? <RightCircleOutlined /> : <LeftCircleOutlined />} 
-                            size="middle" 
+                            shape="circle"
+                            icon={collapsedMenu ? <RightCircleOutlined /> : <LeftCircleOutlined />}
+                            size="middle"
                         />
                     </div>
                 </Menu>
@@ -98,7 +121,16 @@ export default function Home() {
                 </div>
             </main>
 
-
+            <Modal 
+                title="Sair do sistema"
+                okText="SIM"
+                cancelText="NÃO"
+                visible={showModalLogout} 
+                onOk={logout} 
+                onCancel={() => setShowModalLogout(false)}
+            >
+                Deseja realmente sair do sistema?
+            </Modal>
         </div>
     )
 }

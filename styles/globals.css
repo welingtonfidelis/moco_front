@@ -7,13 +7,14 @@
 :root {
   --color-background-light: #f0f0f7; 
   --color-background-dark: #0D0D0D;
-  --color-card-light: #DCEEF2;
+  --color-card-light: #e6f7ff;
   --color-primary: #0511F2;
   --color-secondary: #0583F2;
   --color-title-primary: #038C7F;
   --color-title-secondary: #1B7EA6;
   --color-text-base: #6a6180;
   --color-text-error: #d61212;
+  --color-text-secondary: #7B7B7B;
 
   font-size: 60%;
 }
