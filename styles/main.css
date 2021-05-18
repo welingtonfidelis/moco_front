@@ -1,0 +1,36 @@
+#main-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-page header {
+    background: var(--color-card-light);
+}
+
+#main-page header img {
+    width: 110px;
+    height: 60px;
+}
+
+#main-page main {
+    display: flex;
+    flex-grow: 1;
+}
+
+#main-page main .ant-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0;
+}
+
+#main-page main .ant-menu .ant-menu-expand-button {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    padding: 10px;
+}

@@ -1,6 +1,7 @@
-import '../styles/animation.css'
-import '../styles/globals.css'
-import '../styles/login.css'
+import '../styles/animation.css';
+import '../styles/globals.css';
+import '../styles/login.css';
+import '../styles/main.css';
 
 import { storeWrapper } from '../store';
 

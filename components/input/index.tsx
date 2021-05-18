@@ -5,6 +5,7 @@ interface Props extends InputProps {}
 export const Input: React.FC<Props> = (props) => (
     <InputAntd
         size="large"
+        className="input-simple"
         { ...props }
     />
 )

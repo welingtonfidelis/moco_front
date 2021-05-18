@@ -19,7 +19,7 @@
 
 #login-page main {
     width: 65vw;
-    background: #DCEEF2;
+    background: var(--color-card-light);
     padding: 20px;
     border-radius: 6px;
     display: flex;
@@ -31,7 +31,7 @@
 }
 
 #login-page a {
-    color: #6A6180;
+    color: var(--color-text-base);
     font-weight: 500;
     margin-top: 20px;
     text-align: center;
@@ -39,7 +39,7 @@
 
 #login-page .login-error-message {
     text-align: center;
-    color: red;
+    color: var(--color-text-error);
 }
 
 @media (max-width: 600px) {
