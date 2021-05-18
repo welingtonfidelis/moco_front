@@ -2,7 +2,8 @@ import { HYDRATE } from "next-redux-wrapper";
 import { LOGIN } from "./types";
 
 const initialState = {
-    name: 'testeeee',
+    name: null,
+    email: null,
     token: null
 };
 

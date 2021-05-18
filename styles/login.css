@@ -26,8 +26,20 @@
     flex-direction: column;
 }
 
-#login-page main form span {
-    margin-bottom: 10px;
+#login-page main button {
+    margin-top: 10px;
+}
+
+#login-page a {
+    color: #6A6180;
+    font-weight: 500;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#login-page .login-error-message {
+    text-align: center;
+    color: red;
 }
 
 @media (max-width: 600px) {

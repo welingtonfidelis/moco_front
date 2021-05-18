@@ -1,6 +1,4 @@
-import { Provider } from 'react-redux';
-import withRedux from 'next-redux-wrapper';
-
+import '../styles/animation.css'
 import '../styles/globals.css'
 import '../styles/login.css'
 

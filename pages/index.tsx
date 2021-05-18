@@ -1,24 +1,53 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, InputPassword } from '../components/input';
 import { ButtonPrimary } from '../components/button';
 import { UserOutlined } from '@ant-design/icons';
-import { UserInterface } from '../store/user/model';
 import { login } from '../store/user/actions';
+import { api } from '../services/api';
+import { Notification } from '../components/notification';
+import { Form } from 'antd';
+import { LoginReducerInterface } from '../store/login/model';
+import { startLoading, stopLoading } from '../store/login/actions';
 
 export default function Home() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const users = useSelector((state: { user: UserInterface }) => state.user)
   const dispatch = useDispatch();
+  const loginInfo = useSelector((state: { login: LoginReducerInterface }) => state.login);
 
-  const handleLogin = () => {
-    console.log('=>', user, password);
+  const handleLogin = async () => {
+    try {
+      dispatch(startLoading());
 
-    dispatch(login({name: 'ste', token: ''}))
+      const response = await api.post('/users/login', { user, password });
+
+      const { data: dataResponse } = response;
+      const { data } = dataResponse;
+
+      dispatch(login(data));
+      dispatch(stopLoading());
+
+      Notification({
+        type: 'success',
+        message: 'Sucesso',
+        description: `Seja bem vindo(a) ${data.name}.`
+      });
+
+    } catch (error) {
+      dispatch(stopLoading());
+
+      setErrorMessage('Usuário ou senha incorretos');
+
+      Notification({
+        type: 'error',
+        message: 'Erro',
+        description: 'Confirme se seu usuário e senha estão corretos.',
+      });
+    }
   }
 
   return (
@@ -30,36 +59,57 @@ export default function Home() {
       </Head>
 
       <main>
-        {
-          /* <h1>{users.name}</h1> */}
-          <img src="/assets/images/logo_transparent.png" alt="Logo" />
+        <img src="/assets/images/logo_transparent.png" alt="Logo" />
 
-          <strong>
-            Seja bem vindo(a).
-            <br />
-            Insira seus dados e vamos começar.
-          </strong>
-          
-          <form>
+        <strong>
+          Seja bem vindo(a).
+          <br />
+          Insira seus dados e vamos começar.
+        </strong>
+
+        <Form
+          onFinish={handleLogin}
+        >
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Insira seu usário ou email" }]}
+          >
             <Input
               placeholder="Usuário ou email"
               value={user}
+              suffix={<UserOutlined />}
+              allowClear
               onChange={e => setUser(e.target.value)}
-              suffix={<UserOutlined/>}
             />
-       
+          </Form.Item>
+
+          <Form.Item
+            name="userpassword"
+            rules={[{ required: true, message: "Insira sua senha" }]}
+          >
             <InputPassword
               placeholder="Senha"
               value={password}
+              allowClear
               onChange={e => setPassword(e.target.value)}
             />
+          </Form.Item>
 
-            <ButtonPrimary 
-              onClick={handleLogin}
-            >
-              Entrar
+          <div className="login-error-message">
+            <span>{errorMessage}</span>
+          </div>
+
+          <ButtonPrimary
+            htmlType="submit"
+            loading={loginInfo.loading}
+          >
+            Entrar
             </ButtonPrimary>
-          </form>
+        </Form>
+
+        <a href="#">Esqueci minha senha</a>
+
+        <a href="#">Não tenho cadastro</a>
       </main>
 
       <footer>

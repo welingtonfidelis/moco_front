@@ -12,6 +12,7 @@ export const Input: React.FC<Props> = (props) => (
 export const InputPassword: React.FC<Props> = (props) => (
     <InputAntd.Password
         size="large"
+        className="input-simple"
         { ...props }
     />
 )
