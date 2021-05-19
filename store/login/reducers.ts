@@ -8,7 +8,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case HYDRATE: {
-            return { ...state, ...action.payload.settings };
+            return { ...state, ...action.payload.login };
         }
 
         case START_LOAD: {

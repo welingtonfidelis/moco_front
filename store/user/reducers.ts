@@ -1,5 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { LOGIN } from "./types";
+import { LOGIN, LOGOUT } from "./types";
 
 const initialState = {
     name: null,
@@ -9,15 +9,24 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case HYDRATE:
-            return { ...state, ...action.payload.settings };
+        case HYDRATE: {
+            return { ...state, ...action.payload.user }
+        }
 
-        case LOGIN:
-            const newState = { ...state, ...action.payload };
+        case LOGIN: {
+
+            const newState = { ...state, ...action.payload }
             return newState;
+        }
 
-        default:
+        case LOGOUT: {
+            const newState = { name: null, email: null, token: null }
+            return newState;
+        }
+
+        default: {
             return state;
+        }
     }
 };
 
