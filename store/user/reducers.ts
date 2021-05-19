@@ -14,7 +14,6 @@ const reducer = (state = initialState, action) => {
         }
 
         case LOGIN: {
-
             const newState = { ...state, ...action.payload }
             return newState;
         }

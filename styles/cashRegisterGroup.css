@@ -1,0 +1,74 @@
+#cash-register-group-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 5px);
+    background: #fff;
+    margin: 5px 0 0 5px;
+    padding: 8px;
+}
+
+#cash-register-group-page h3 {
+    font-size: 2rem;
+    color: var(--color-title-primary);
+}
+
+#cash-register-group-page .group-search {
+    display: flex;
+    align-items: center;
+}
+
+#cash-register-group-page .group-search .button-simple {
+    flex: 1;
+    margin-left: 15px;
+    background: var(--color-tertiary);
+    border-color: var(--color-tertiary);
+}   
+
+#cash-register-group-page .group-list {
+    overflow: auto;
+    height: calc(100vh - 212px);
+    margin: 7px 0;
+}
+
+#cash-register-group-page .group-list-item {
+    display: flex;
+    align-items: center;
+    background: var(--color-card-dark);
+    color: var(--color-card-light);
+    padding: 4px;
+    border-radius: 20px 0 0 20px;
+    margin-top: 5px;
+}
+
+#cash-register-group-page .group-list-icon {
+    height: 33px;
+    width: 33px;
+    background: var(--color-title-secondary);
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+#cash-register-group-page .group-list-item strong {
+    flex: 1;
+}
+
+#cash-register-group-page .group-list-action span {
+    font-size: 23px;
+    margin-left: 10px;
+    transition: .5s;
+}
+
+#cash-register-group-page .group-list-action span:not(:first-child) {
+    color: var(--color-text-error);
+}
+
+#cash-register-group-page .group-list-action span:hover {
+    filter: brightness(.6);
+    cursor: pointer;
+}
+
+#cash-register-group-page .ant-pagination {
+    text-align: center;
+    border-top: 1px solid #d9d9d9;
+    padding-top: 5px;
+}

@@ -9,7 +9,7 @@ interface ItemList {
 }
 
 interface Props extends MenuProps {
-    itemList: ItemList[]
+    items: ItemList[]
 }
 
 export const Menu: React.FC<Props> = (props) => (
@@ -17,7 +17,7 @@ export const Menu: React.FC<Props> = (props) => (
         {...props}
     >
         {
-            props.itemList.map((item, index) => (
+            props.items.map((item, index) => (
                 <MenuAntd.Item
                     key={index + 1}
                     onClick={item.action}

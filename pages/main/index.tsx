@@ -1,6 +1,6 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button, Dropdown } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     HomeOutlined, DollarCircleOutlined,
     SnippetsOutlined, BarChartOutlined,
@@ -14,37 +14,35 @@ import ReportPage from '../report';
 import Router from "next/router";
 import { Modal } from "../../components/modal";
 import { Menu } from '../../components/menu';
-import { UserReducerInterface } from "../../store/user/model";
 import { logout } from "../../store/user/actions";
 
 export default function Home() {
-    const [selectedPage, setSelectedPage] = useState(HomePage);
+    const [selectedPage, setSelectedPage] = useState(<HomePage/>);
     const [collapsedMenu, setCollapsedMenu] = useState(true);
     const [showModalLogout, setShowModalLogout] = useState(false);
 
     const dispatch = useDispatch();
-    const userInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
 
     const menuOptions = [
         {
             title: 'Principal',
             icon: <HomeOutlined />,
-            action: () => handleChangePage('home')
+            action: () => setSelectedPage(<HomePage />)
         },
         {
             title: 'Caixa',
             icon: <DollarCircleOutlined />,
-            action: () => handleChangePage('cashregister')
+            action: () => setSelectedPage(<CashRegisterPage />)
         },
         {
             title: 'Grupo de caixa',
             icon: <SnippetsOutlined />,
-            action: () => handleChangePage('cashregistergroup')
+            action: () => setSelectedPage(<CashRegisterGroupPage />)
         },
         {
             title: 'Relatório',
             icon: <BarChartOutlined />,
-            action: () => handleChangePage('report')
+            action: () => setSelectedPage(<ReportPage />)
         },
     ]
 
@@ -56,26 +54,6 @@ export default function Home() {
             danger: true,
         }
     ]
-
-    const handleChangePage = (page: string) => {
-        switch (page) {
-            case 'home':
-                setSelectedPage(HomePage)
-                break;
-
-            case 'cashregister':
-                setSelectedPage(CashRegisterPage);
-                break;
-
-            case 'cashregistergroup':
-                setSelectedPage(CashRegisterGroupPage);
-                break;
-
-            case 'report':
-                setSelectedPage(ReportPage);
-                break;
-        }
-    }
 
     const handleLogout = () => {
         setShowModalLogout(false);
@@ -92,7 +70,7 @@ export default function Home() {
                 <Dropdown 
                     overlay={(
                         <Menu
-                            itemList={userMenuOptions}
+                            items={userMenuOptions}
                         />
                     )}
                 >
@@ -107,7 +85,7 @@ export default function Home() {
                     defaultSelectedKeys={['1']}
                     mode="inline"
                     inlineCollapsed={collapsedMenu}
-                    itemList={menuOptions}
+                    items={menuOptions}
                 >
                     <div className="ant-menu-expand-button">
                         <Button
@@ -120,7 +98,7 @@ export default function Home() {
                     </div>
                 </Menu>
 
-                <div>
+                <div className="page-container">
                     {selectedPage}
                 </div>
             </main>

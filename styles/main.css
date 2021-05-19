@@ -11,6 +11,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 5px;
+    height: 60px;
 }
 
 #main-page header img {
@@ -38,4 +39,8 @@
     align-items: flex-end;
     width: 100%;
     padding: 10px;
+}
+
+#main-page main .page-container {
+    flex-grow: 1;
 }
