@@ -30,43 +30,6 @@
     margin: 7px 0;
 }
 
-#cash-register-group-page .group-list-item {
-    display: flex;
-    align-items: center;
-    background: var(--color-card-dark);
-    color: var(--color-card-light);
-    padding: 4px;
-    border-radius: 20px 0 0 20px;
-    margin-top: 5px;
-}
-
-#cash-register-group-page .group-list-icon {
-    height: 33px;
-    width: 33px;
-    background: var(--color-title-secondary);
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-#cash-register-group-page .group-list-item strong {
-    flex: 1;
-}
-
-#cash-register-group-page .group-list-action span {
-    font-size: 23px;
-    margin-left: 10px;
-    transition: .5s;
-}
-
-#cash-register-group-page .group-list-action span:not(:first-child) {
-    color: var(--color-text-error);
-}
-
-#cash-register-group-page .group-list-action span:hover {
-    filter: brightness(.6);
-    cursor: pointer;
-}
-
 #cash-register-group-page .ant-pagination {
     text-align: center;
     border-top: 1px solid #d9d9d9;

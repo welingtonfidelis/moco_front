@@ -1,9 +1,10 @@
-import { DeleteFilled, EditOutlined } from '@ant-design/icons';
-import { Spin, Pagination, Empty } from 'antd';
-import { useEffect, useState } from 'react';
+import { Spin, Pagination, Empty, Form } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
-import { InputSearch } from '../../components/input';
+import { Input, InputSearch } from '../../components/input';
+import { ListItem } from '../../components/listItem';
+import { Modal } from '../../components/modal';
 import { api } from '../../services/api';
 import { haveToken } from '../../services/auth';
 import { startLoading, stopLoading, updateList } from '../../store/cashRegisterGroup/actions';
@@ -18,7 +19,11 @@ export default function CashRegisterGroup() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [total, setTotal] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [description, setDescription] = useState('');
+    const [observation, setObservation] = useState('');
 
+    const buttonRef = useRef(null)
     const dispatch = useDispatch();
     const userInfo = useSelector(
         (state: { user: UserReducerInterface }) => state.user
@@ -63,7 +68,7 @@ export default function CashRegisterGroup() {
     return (
         <div id="cash-register-group-page">
             <Spin spinning={cashRegisterGroupInfo.loading}>
-                <h3>Registro de caixa</h3>
+                <h3>Grupos para registro de caixa</h3>
 
                 <div className="group-search">
                     <InputSearch
@@ -71,29 +76,22 @@ export default function CashRegisterGroup() {
                         onSearch={(e) => { console.log(e) }}
                     />
 
-                    <ButtonPrimary>
+                    <ButtonPrimary onClick={() => setShowModal(true)}>
                         Novo
                     </ButtonPrimary>
                 </div>
 
                 <div className="group-list">
                     {
-                        total > 0 
-                        ? cashRegisterGroupInfo.list.map((item, index) => (
-                                <div className="group-list-item" key={index}>
-                                    <div className="group-list-icon"></div>
-    
-                                    <strong>{item.description}</strong>
-    
-                                    <div className="group-list-action">
-                                        <EditOutlined title="Editar" />
-    
-                                        <DeleteFilled title="Excluir" />
-                                    </div>
-                                </div>
+                        total > 0
+                            ? cashRegisterGroupInfo.list.map((item, index) => (
+                                <ListItem
+                                    key={index}
+                                    title={item.description}
+                                />
                             ))
-                        
-                        : <Empty description="Esta lista está vazia."/>
+
+                            : <Empty description="Esta lista está vazia." />
                     }
                 </div>
 
@@ -105,6 +103,42 @@ export default function CashRegisterGroup() {
                     total={total}
                 />
             </Spin>
+
+            <Modal
+                title="Novo grupo para registro de caixa"
+                isVisible={showModal}
+                onOk={() => {buttonRef.current.click()}}
+                onCancel={() => setShowModal(false)}
+            >
+                <Form
+                    onFinish={(e) => console.log(e)}
+                >
+                    <Form.Item
+                        name="description"
+                        rules={[{ required: true, message: "Insira uma descrição" }]}
+                    >
+                        <Input
+                            placeholder="Descrição"
+                            value={description}
+                            allowClear
+                            onChange={e => setDescription(e.target.value)}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="observation"
+                    >
+                        <Input
+                            placeholder="Observação"
+                            value={observation}
+                            allowClear
+                            onChange={e => setObservation(e.target.value)}
+                        />
+                    </Form.Item>
+
+                    <button ref={buttonRef}  type="submit" hidden/>
+                </Form>
+            </Modal>
         </div>
     )
 }

@@ -31,6 +31,10 @@
     flex: 0;
 }
 
+#main-page main .ant-menu li span {
+    font-size: 1.9rem;
+}
+
 #main-page main .ant-menu .ant-menu-expand-button {
     display: flex;
     flex-direction: column;

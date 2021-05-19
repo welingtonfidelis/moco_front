@@ -10,8 +10,8 @@ interface Props extends ModalProps {
 export const Modal: React.FC<Props> = (props) => (
     <ModalAntd
         title={props.title}
-        okText="SIM"
-        cancelText="NÃO"
+        okText="Salvar"
+        cancelText="Cancelar"
         visible={props.isVisible}
         onOk={props.onOk}
         onCancel={props.onCancel}

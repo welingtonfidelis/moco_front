@@ -19,7 +19,7 @@ import { logout } from "../../store/user/actions";
 export default function Home() {
     const [selectedPage, setSelectedPage] = useState(<HomePage/>);
     const [collapsedMenu, setCollapsedMenu] = useState(true);
-    const [showModalLogout, setShowModalLogout] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -50,13 +50,13 @@ export default function Home() {
         {
             title: 'Sair do sistema',
             icon: <LogoutOutlined/>,
-            action: () => setShowModalLogout(true),
+            action: () => setShowModal(true),
             danger: true,
         }
     ]
 
     const handleLogout = () => {
-        setShowModalLogout(false);
+        setShowModal(false);
         dispatch(logout());
 
         Router.replace('/');
@@ -105,9 +105,11 @@ export default function Home() {
 
             <Modal 
                 title="Sair do sistema"
-                isVisible={showModalLogout} 
+                okText="Sim"
+                cancelText="Não"
+                isVisible={showModal} 
                 onOk={handleLogout} 
-                onCancel={() => setShowModalLogout(false)}
+                onCancel={() => setShowModal(false)}
             >
                 Deseja realmente sair do sistema?
             </Modal>
