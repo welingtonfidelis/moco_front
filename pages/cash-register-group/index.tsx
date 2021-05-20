@@ -1,15 +1,20 @@
 import { Spin, Pagination, Empty, Form } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
-import { Input, InputSearch } from '../../components/input';
+import { Input, InputSearch, InputTextArea } from '../../components/input';
 import { ListItem } from '../../components/listItem';
 import { Modal } from '../../components/modal';
-import { api } from '../../services/api';
-import { haveToken } from '../../services/auth';
-import { startLoading, stopLoading, updateList } from '../../store/cashRegisterGroup/actions';
 import { CashRegisterGroupReducerInterface } from '../../store/cashRegisterGroup/model';
 import { UserReducerInterface } from '../../store/user/model';
+import { haveToken } from '../../services/auth';
+import {
+    createService, deleteService, listAllService, updateService 
+} from '../../services/crud';
+import {
+    startListLoading, stopListLoading, startSaveLoading, stopSaveLoading, 
+    updateList, startDeleteLoading, stopDeleteLoading
+} from '../../store/cashRegisterGroup/actions';
 
 export default function CashRegisterGroup() {
     useEffect(() => {
@@ -19,10 +24,12 @@ export default function CashRegisterGroup() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [total, setTotal] = useState(0);
+    const [reloadList, setReloadList] = useState(0);
+    const [seletedUpdate, setSelectedUpdate] = useState('');
+    const [descriptionSearch, setDescriptionSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [description, setDescription] = useState('');
-    const [observation, setObservation] = useState('');
 
+    const [form] = Form.useForm();
     const buttonRef = useRef(null)
     const dispatch = useDispatch();
     const userInfo = useSelector(
@@ -31,49 +38,118 @@ export default function CashRegisterGroup() {
     const cashRegisterGroupInfo = useSelector(
         (state: { cashRegisterGroup: CashRegisterGroupReducerInterface }) => state.cashRegisterGroup
     );
+    const url = '/cash-register-groups';
+    const authorization = userInfo.token;
 
     useEffect(() => {
         getCashRegisterGroupList();
-    }, [page, limit]);
+    }, [page, limit, reloadList]);
 
     const getCashRegisterGroupList = async () => {
-        try {
-            dispatch(startLoading());
+        dispatch(startListLoading());
 
-            const response = await api.get(
-                '/cash-register-groups',
-                {
-                    params: { limit, page },
-                    headers: { authorization: userInfo.token }
-                }
-            );
-
-            const { data: dataResponse } = response;
-            const { data } = dataResponse;
-
-            console.log('->', data);
-            dispatch(updateList(data.rows));
-            setTotal(data.count);
-
-            dispatch(stopLoading());
-
-        } catch (error) {
-            dispatch(stopLoading());
-
-            console.log(error);
-
+        const props = {
+            url,
+            limit,
+            page,
+            authorization,
+            description: null
         }
+
+        if(descriptionSearch.length > 2) props.description = descriptionSearch;
+
+        const { rows, count } = await listAllService(props);
+
+        dispatch(updateList(rows));
+        setTotal(count);
+
+        dispatch(stopListLoading());
+    }
+
+    const handleSaveCashRegisterGroup = async (values: any) => {
+        dispatch(startSaveLoading());
+
+        let noErrors = false;
+
+        if (seletedUpdate !== '') {
+           const { ok } = await updateService({
+                id: seletedUpdate,
+                url,
+                values,
+                authorization
+            });
+
+            noErrors = ok;
+        }
+        else {
+            const { ok } = await createService({
+                url,
+                values,
+                authorization
+            });
+
+            noErrors = ok;
+        }
+
+        dispatch(stopSaveLoading());
+
+        if(noErrors) {
+            handleClearForm();
+    
+            setReloadList(reloadList + 1);
+        }
+    }
+
+    const handleSelectCashRegisterGroup = (index: number) => {
+        const { id, description, observation } = cashRegisterGroupInfo.list[index];
+
+        setSelectedUpdate(id);
+
+        form.setFieldsValue({
+            observation,
+            description
+        });
+
+        setShowModal(true);
+    }
+
+    const handleSearchCashRegisterGroup = (description: string) => {
+        setDescriptionSearch(description);
+        setPage(1);
+        setReloadList(reloadList +1);
+    }
+
+    const handleDeleteCashRegisterGroup = async (index: number) => {
+        dispatch(startDeleteLoading(index));
+
+        const { id } = cashRegisterGroupInfo.list[index];
+
+        const { ok } = await deleteService({
+            id, 
+            url,
+            authorization 
+        });
+
+        dispatch(stopDeleteLoading(index));
+
+        if(ok) setReloadList(reloadList + 1);
+    }
+
+    const handleClearForm = () => {
+        setShowModal(false)
+        form.resetFields();
+        setSelectedUpdate('');
     }
 
     return (
         <div id="cash-register-group-page">
-            <Spin spinning={cashRegisterGroupInfo.loading}>
+            <Spin spinning={cashRegisterGroupInfo.loadingList}>
                 <h3>Grupos para registro de caixa</h3>
 
                 <div className="group-search">
                     <InputSearch
                         placeholder="Descrição"
-                        onSearch={(e) => { console.log(e) }}
+                        onSearch={(e) => handleSearchCashRegisterGroup(e)}
                     />
 
                     <ButtonPrimary onClick={() => setShowModal(true)}>
@@ -88,6 +164,9 @@ export default function CashRegisterGroup() {
                                 <ListItem
                                     key={index}
                                     title={item.description}
+                                    onEdit={() => handleSelectCashRegisterGroup(index)}
+                                    onDelete={() => handleDeleteCashRegisterGroup(index)}
+                                    onDeleteLoad={item.loadingDelete}
                                 />
                             ))
 
@@ -96,7 +175,7 @@ export default function CashRegisterGroup() {
                 </div>
 
                 <Pagination
-                    defaultCurrent={1}
+                    defaultCurrent={page}
                     defaultPageSize={limit}
                     onChange={(e) => setPage(e)}
                     onShowSizeChange={(e, f) => setLimit(f)}
@@ -107,11 +186,13 @@ export default function CashRegisterGroup() {
             <Modal
                 title="Novo grupo para registro de caixa"
                 isVisible={showModal}
-                onOk={() => {buttonRef.current.click()}}
-                onCancel={() => setShowModal(false)}
+                onOk={() => { buttonRef.current.click() }}
+                onCancel={handleClearForm}
+                confirmLoading={cashRegisterGroupInfo.loadingSave}
             >
                 <Form
-                    onFinish={(e) => console.log(e)}
+                    onFinish={handleSaveCashRegisterGroup}
+                    form={form}
                 >
                     <Form.Item
                         name="description"
@@ -119,24 +200,18 @@ export default function CashRegisterGroup() {
                     >
                         <Input
                             placeholder="Descrição"
-                            value={description}
-                            allowClear
-                            onChange={e => setDescription(e.target.value)}
                         />
                     </Form.Item>
 
                     <Form.Item
                         name="observation"
                     >
-                        <Input
+                        <InputTextArea
                             placeholder="Observação"
-                            value={observation}
-                            allowClear
-                            onChange={e => setObservation(e.target.value)}
                         />
                     </Form.Item>
 
-                    <button ref={buttonRef}  type="submit" hidden/>
+                    <button ref={buttonRef} type="submit" hidden />
                 </Form>
             </Modal>
         </div>

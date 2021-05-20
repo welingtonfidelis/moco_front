@@ -1,16 +1,20 @@
 import { notification } from "antd"
+import { handleUnauthorized } from "../../services/auth";
 
 interface Props {
   message: string;
   description: string;
   type: 'success' | 'error' | 'warning' | 'info';
-  duration?: number
+  duration?: number,
+  statusCode?: number;
 }
 
 export const Notification = (props: Props) => {
+    const unauthorizedMessage = handleUnauthorized(props.statusCode);
+    
     return notification[props.type]({
       message: props.message,
-      description: props.description,
+      description: unauthorizedMessage || props.description,
       duration: props.duration ?? 8
     });
 }

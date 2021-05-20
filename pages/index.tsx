@@ -45,10 +45,13 @@ export default function Home() {
 
       setErrorMessage('Usuário ou senha incorretos');
 
+      const message = 'Houve um erro ao efetuar o login. Por favor, ' +
+        'confirme se seu usuário e senha estão corretos.';
+
       Notification({
         type: 'error',
-        message: 'Erro',
-        description: 'Confirme se seu usuário e senha estão corretos.',
+        message: 'Login',
+        description: message,
       });
     }
   }

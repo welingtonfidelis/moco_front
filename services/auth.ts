@@ -6,3 +6,13 @@ export const haveToken = (user: UserReducerInterface) => {
         Router.replace('/');
     }
 }
+
+export const handleUnauthorized = (statusCode: number) => {
+    console.log('===>', statusCode);
+    
+    if (statusCode && statusCode === 401) {
+        Router.replace('/');
+
+        return 'Token inválido ou expirado. Por favor, faça o login novamente.'
+    }
+}

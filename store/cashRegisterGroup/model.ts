@@ -4,10 +4,12 @@ export interface CashRegisterGroupItemReducerInterface {
     observation: string;
     created_at: Date;
     updated_at: Date;
+    loadingDelete: boolean;
 }
 
 export interface CashRegisterGroupReducerInterface {
-    loading: boolean;
+    loadingList: boolean;
+    loadingSave: boolean;
     page: number;
     limit: number;
     total: number;

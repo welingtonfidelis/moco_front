@@ -1,5 +1,5 @@
-import { DeleteFilled, EditOutlined } from '@ant-design/icons';
-import { Button as ButtonAntd, ButtonProps } from 'antd';
+import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Popconfirm } from 'antd';
 
 interface Props {
     key: number;
@@ -7,6 +7,9 @@ interface Props {
     subtitle?: string;
     detail1?: string;
     detail2?: string;
+    onEdit: (item: any) => void;
+    onDelete: (item: any) => void;
+    onDeleteLoad: boolean;
 }
 
 export const ListItem: React.FC<Props> = (props) => (
@@ -24,9 +27,17 @@ export const ListItem: React.FC<Props> = (props) => (
         </div>
 
         <div className="list-item-action">
-            <EditOutlined title="Editar" />
+            <EditOutlined title="Editar" onClick={props.onEdit}/>
 
-            <DeleteFilled title="Excluir" />
+            <Popconfirm 
+                placement="left" 
+                title={'Deseja realmente excluir esta informação?'} 
+                onConfirm={props.onDelete} 
+                okText="Sim" 
+                cancelText="Não"
+            >
+                { props.onDeleteLoad ? <LoadingOutlined /> : <DeleteFilled title="Excluir"/> }
+            </Popconfirm> 
         </div>
     </div>
 )
