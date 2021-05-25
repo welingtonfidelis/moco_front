@@ -10,7 +10,7 @@
   --color-card-light: #e6f7ff;
   --color-card-dark: #324359;
   --color-primary: #0511F2;
-  --color-secondary: #0583F2;
+  --color-secondary: #1890ff;
   --color-tertiary: #0DA91C;
   --color-title-primary: #038C7F;
   --color-title-secondary: #1B7EA6;
@@ -65,6 +65,14 @@ body, input, button, textarea {
   right: 5px;
   top: 5px;
   z-index: 999;
+}
+
+.ant-select {
+  width: 100%;
+}
+
+.ant-picker {
+  width: 100%;
 }
 
 @media (min-width: 700px) {

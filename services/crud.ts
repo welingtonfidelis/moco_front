@@ -6,10 +6,15 @@ interface RequestInterface {
     authorization: string;
 }
 
-interface ListAllInterface extends RequestInterface {
+interface ParamFilters extends RequestInterface {
+    description?: string;
+    date_start?: string;
+    date_end?: string;
+    cash_register_group_id?: string;
+}
+interface ListAllInterface extends ParamFilters {
     limit: number;
     page: number;
-    description?: string;
 }
 
 interface CreateInterface extends RequestInterface {
@@ -28,13 +33,49 @@ interface DeleteInterface extends RequestInterface {
 export const listAllService = async (props: ListAllInterface) => {
     const returnedValues = { ok: false, rows: [], count: 0 }
 
+    const url = props.url;
+    const authorization = props.authorization;
+
+    delete props.url;
+    delete props.authorization;
+
+    try {
+        const response = await api.get(
+            url,
+            {
+                params: { ...props },
+                headers: { authorization }
+            }
+        );
+
+        const { data: dataResponse } = response;
+        const { data } = dataResponse;
+        returnedValues.rows = data.rows;
+        returnedValues.count = data.count;
+        returnedValues.ok = true;
+
+    } catch (error) {
+        const message = 'Erro ao trazer a lista.'
+        const description = 'Houve um problema ao trazer esta lista. Por favor, tente novamente.';
+
+        Notification({
+            type: 'error',
+            message,
+            description,
+            statusCode: error?.response?.status
+        });
+    } finally {
+        return returnedValues;
+    }
+}
+
+export const listAllServiceWithoutParams = async (props: RequestInterface) => {
+    const returnedValues = { ok: false, rows: [], count: 0 }
+
     try {
         const response = await api.get(
             props.url,
             {
-                params: { 
-                    limit: props.limit, page: props.page, description: props.description 
-                },
                 headers: { authorization: props.authorization }
             }
         );
@@ -147,7 +188,7 @@ export const deleteService = async (props: DeleteInterface) => {
         Notification({
             type: 'success',
             message: 'Excluido.',
-            description: 'Informação cxcluida com sucesso.'
+            description: 'Informação excluida com sucesso.'
         });
 
     } catch (error) {

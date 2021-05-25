@@ -1,0 +1,74 @@
+#cash-register-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 5px);
+    background: #fff;
+    margin: 5px 0 0 5px;
+    padding: 8px;
+}
+
+#cash-register-page h3 {
+    font-size: 2rem;
+    color: var(--color-title-primary);
+}
+
+#cash-register-page .group-search {
+    display: flex;
+    align-items: center;
+}
+
+#cash-register-page .group-search-btn {
+    display: flex;
+    width: 100%;
+}
+
+#cash-register-page .group-search .button-simple {
+    flex: 1;
+    margin-left: 10px;
+    background: var(--color-tertiary);
+    border-color: var(--color-tertiary);
+}
+
+#cash-register-page .group-search .button-simple:first-child {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+#cash-register-page .group-list {
+    overflow: auto;
+    height: calc(100vh - 212px);
+    margin: 7px 0;
+}
+
+#cash-register-page .ant-pagination {
+    text-align: center;
+    border-top: 1px solid #d9d9d9;
+    padding-top: 5px;
+}
+
+#cash-register-page .group-search :not(.ant-btn) {
+    margin-right: 2px;
+}
+
+@media (max-width: 600px) {
+    #cash-register-page .group-search-btn {
+        flex-direction: row;
+    }
+
+    #cash-register-page .group-search :not(.ant-btn) {
+        margin-right: 0;
+        margin-bottom: 2px;
+    }
+
+    #cash-register-page .group-search {
+        flex-direction: column;
+    }
+
+    #cash-register-page .group-search .button-simple {
+        margin: 5px 2px;
+    }
+
+    #cash-register-page .group-list {
+        height: calc(100vh - 350px);
+    }
+}

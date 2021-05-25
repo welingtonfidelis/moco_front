@@ -12,8 +12,10 @@ import {
     createService, deleteService, listAllService, updateService 
 } from '../../services/crud';
 import {
-    startListLoading, stopListLoading, startSaveLoading, stopSaveLoading, 
-    updateList, startDeleteLoading, stopDeleteLoading
+    cashRegisterGroupStartListLoading, cashRegisterGroupStopListLoading, 
+    cashRegisterGroupStartSaveLoading, cashRegisterGroupStopSaveLoading, 
+    cashRegisterGroupUpdateList, cashRegisterGroupStartDeleteLoading, 
+    cashRegisterGroupStopDeleteLoading
 } from '../../store/cashRegisterGroup/actions';
 
 export default function CashRegisterGroup() {
@@ -46,7 +48,7 @@ export default function CashRegisterGroup() {
     }, [page, limit, reloadList]);
 
     const getCashRegisterGroupList = async () => {
-        dispatch(startListLoading());
+        dispatch(cashRegisterGroupStartListLoading());
 
         const props = {
             url,
@@ -60,14 +62,14 @@ export default function CashRegisterGroup() {
 
         const { rows, count } = await listAllService(props);
 
-        dispatch(updateList(rows));
+        dispatch(cashRegisterGroupUpdateList(rows));
         setTotal(count);
 
-        dispatch(stopListLoading());
+        dispatch(cashRegisterGroupStopListLoading());
     }
 
     const handleSaveCashRegisterGroup = async (values: any) => {
-        dispatch(startSaveLoading());
+        dispatch(cashRegisterGroupStartSaveLoading());
 
         let noErrors = false;
 
@@ -91,7 +93,7 @@ export default function CashRegisterGroup() {
             noErrors = ok;
         }
 
-        dispatch(stopSaveLoading());
+        dispatch(cashRegisterGroupStopSaveLoading());
 
         if(noErrors) {
             handleClearForm();
@@ -120,7 +122,7 @@ export default function CashRegisterGroup() {
     }
 
     const handleDeleteCashRegisterGroup = async (index: number) => {
-        dispatch(startDeleteLoading(index));
+        dispatch(cashRegisterGroupStartDeleteLoading(index));
 
         const { id } = cashRegisterGroupInfo.list[index];
 
@@ -130,7 +132,7 @@ export default function CashRegisterGroup() {
             authorization 
         });
 
-        dispatch(stopDeleteLoading(index));
+        dispatch(cashRegisterGroupStopDeleteLoading(index));
 
         if(ok) setReloadList(reloadList + 1);
     }

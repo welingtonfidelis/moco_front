@@ -8,8 +8,6 @@ export const haveToken = (user: UserReducerInterface) => {
 }
 
 export const handleUnauthorized = (statusCode: number) => {
-    console.log('===>', statusCode);
-    
     if (statusCode && statusCode === 401) {
         Router.replace('/');
 

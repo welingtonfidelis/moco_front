@@ -1,7 +1,7 @@
 import { Input as InputAntd, InputProps } from 'antd';
 import { SearchProps, TextAreaProps } from 'antd/lib/input';
 
-interface Props extends InputProps { }
+interface Props extends InputProps {}
 interface InputSearchProps extends SearchProps {}
 interface InputTextArea extends TextAreaProps {}
 

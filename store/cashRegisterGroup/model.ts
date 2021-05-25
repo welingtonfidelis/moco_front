@@ -10,8 +10,5 @@ export interface CashRegisterGroupItemReducerInterface {
 export interface CashRegisterGroupReducerInterface {
     loadingList: boolean;
     loadingSave: boolean;
-    page: number;
-    limit: number;
-    total: number;
     list: CashRegisterGroupItemReducerInterface[];
 }

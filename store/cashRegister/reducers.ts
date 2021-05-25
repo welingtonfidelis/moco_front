@@ -13,7 +13,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case HYDRATE: {
-            return { ...state, ...action.payload.cashregistergroup }
+            return { ...state, ...action.payload.cashregister }
         }
 
         case START_LIST_LOAD: {

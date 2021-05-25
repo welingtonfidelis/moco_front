@@ -1,9 +1,9 @@
 import { START_LOAD, STOP_LOAD } from "./types";
 
-export const startLoading = () => ({
+export const loginStartLoading = () => ({
   type: START_LOAD,
 });
 
-export const stopLoading = () => ({
+export const loginStopLoading = () => ({
   type: STOP_LOAD,
 });

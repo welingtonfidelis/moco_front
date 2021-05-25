@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const ListItem: React.FC<Props> = (props) => (
-    <div className="list-item" key={props.key}>
+    <div className="list-item">
         <div className="list-item-icon"></div>
 
         <div className="list-item-col1">

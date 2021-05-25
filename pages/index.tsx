@@ -10,7 +10,7 @@ import { api } from '../services/api';
 import { Notification } from '../components/notification';
 import { Form } from 'antd';
 import { LoginReducerInterface } from '../store/login/model';
-import { startLoading, stopLoading } from '../store/login/actions';
+import { loginStartLoading, loginStopLoading } from '../store/login/actions';
 
 export default function Home() {
   const [user, setUser] = useState('');
@@ -22,7 +22,7 @@ export default function Home() {
 
   const handleLogin = async () => {
     try {
-      dispatch(startLoading());
+      dispatch(loginStartLoading());
 
       const response = await api.post('/users/login', { user, password });
 
@@ -30,7 +30,7 @@ export default function Home() {
       const { data } = dataResponse;
 
       dispatch(login(data));
-      dispatch(stopLoading());
+      dispatch(loginStopLoading());
 
       Notification({
         type: 'success',
@@ -41,7 +41,7 @@ export default function Home() {
       Router.replace('/main');
 
     } catch (error) {
-      dispatch(stopLoading());
+      dispatch(loginStopLoading());
 
       setErrorMessage('Usuário ou senha incorretos');
 
