@@ -18,7 +18,7 @@
 }
 
 #login-page main {
-    width: 65vw;
+    width: 500px;
     background: var(--color-card-light);
     padding: 20px;
     border-radius: 6px;
@@ -44,6 +44,6 @@
 
 @media (max-width: 600px) {
     #login-page main {
-        width: 95vw;
+        width: 90vw;
     }
 }
