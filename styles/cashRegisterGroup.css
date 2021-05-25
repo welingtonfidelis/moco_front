@@ -26,7 +26,7 @@
 
 #cash-register-group-page .group-list {
     overflow: auto;
-    height: calc(100vh - 212px);
+    height: calc(100vh - 208px);
     margin: 7px 0;
 }
 

@@ -28,6 +28,5 @@ export const Menu: React.FC<Props> = (props) => (
                 </MenuAntd.Item>
             ))
         }
-        {props.children}
     </MenuAntd>
 )

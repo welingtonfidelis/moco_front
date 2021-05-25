@@ -68,6 +68,6 @@
 
 @media (max-width: 600px) {
     .list-item-col1 {
-        max-width: 118px;
+        width: 118px;
     }
 }

@@ -17,7 +17,7 @@ import { Menu } from '../../components/menu';
 import { logout } from "../../store/user/actions";
 
 export default function Home() {
-    const [selectedPage, setSelectedPage] = useState(<HomePage/>);
+    const [selectedPage, setSelectedPage] = useState(<HomePage />);
     const [collapsedMenu, setCollapsedMenu] = useState(true);
     const [showModal, setShowModal] = useState(false);
 
@@ -49,7 +49,7 @@ export default function Home() {
     const userMenuOptions = [
         {
             title: 'Sair do sistema',
-            icon: <LogoutOutlined/>,
+            icon: <LogoutOutlined />,
             action: () => setShowModal(true),
             danger: true,
         }
@@ -67,7 +67,7 @@ export default function Home() {
             <header>
                 <img src="/assets/images/logo_transparent.png" alt="Logo" />
 
-                <Dropdown 
+                <Dropdown
                     overlay={(
                         <Menu
                             items={userMenuOptions}
@@ -81,13 +81,15 @@ export default function Home() {
             </header>
 
             <main >
-                <Menu
-                    defaultSelectedKeys={['1']}
-                    mode="inline"
-                    inlineCollapsed={collapsedMenu}
-                    items={menuOptions}
-                >
-                    <div className="ant-menu-expand-button">
+                <div className="lateral-menu">
+                    <Menu
+                        defaultSelectedKeys={['1']}
+                        mode="inline"
+                        inlineCollapsed={collapsedMenu}
+                        items={menuOptions}
+                    />
+
+                    <div className="lateral-menu-expand-button">
                         <Button
                             onClick={() => setCollapsedMenu(!collapsedMenu)}
                             title={collapsedMenu ? 'Expandir menu' : 'Retrair menu'}
@@ -96,19 +98,19 @@ export default function Home() {
                             size="middle"
                         />
                     </div>
-                </Menu>
+                </div>
 
                 <div className="page-container">
                     {selectedPage}
                 </div>
             </main>
 
-            <Modal 
+            <Modal
                 title="Sair do sistema"
                 okText="Sim"
                 cancelText="Não"
-                isVisible={showModal} 
-                onOk={handleLogout} 
+                isVisible={showModal}
+                onOk={handleLogout}
                 onCancel={() => setShowModal(false)}
             >
                 Deseja realmente sair do sistema?
