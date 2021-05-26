@@ -9,7 +9,7 @@ import { CashRegisterGroupReducerInterface } from '../../store/cashRegisterGroup
 import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import {
-    createService, deleteService, listAllService, updateService 
+    createService, deleteService, listService, updateService 
 } from '../../services/crud';
 import {
     cashRegisterGroupStartListLoading, cashRegisterGroupStopListLoading, 
@@ -60,10 +60,13 @@ export default function CashRegisterGroup() {
 
         if(descriptionSearch.length > 2) props.description = descriptionSearch;
 
-        const { rows, count } = await listAllService(props);
+        const data = await listService(props);
+        if(data.ok) {
+            const { rows, count } = data;
 
-        dispatch(cashRegisterGroupUpdateList(rows));
-        setTotal(count);
+            dispatch(cashRegisterGroupUpdateList(rows));
+            setTotal(count);
+        }
 
         dispatch(cashRegisterGroupStopListLoading());
     }

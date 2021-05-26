@@ -6,15 +6,13 @@ interface RequestInterface {
     authorization: string;
 }
 
-interface ParamFilters extends RequestInterface {
+interface ListInterface extends RequestInterface {
+    limit?: number;
+    page?: number;
     description?: string;
     date_start?: string;
     date_end?: string;
     cash_register_group_id?: string;
-}
-interface ListAllInterface extends ParamFilters {
-    limit: number;
-    page: number;
 }
 
 interface CreateInterface extends RequestInterface {
@@ -30,8 +28,20 @@ interface DeleteInterface extends RequestInterface {
     id: string;
 }
 
-export const listAllService = async (props: ListAllInterface) => {
-    const returnedValues = { ok: false, rows: [], count: 0 }
+interface ResponseDataInterface {
+    ok: boolean;
+    count?: number;
+    rows?: Array<any>;
+    date_start?: Date;
+    date_end?: Date;
+    revenue?: number;
+    expense?: number;
+    profit?: number;
+    total?: number;
+}
+
+export const listService = async (props: ListInterface) => {
+    const returnedValues: ResponseDataInterface = { ok: false }
 
     const url = props.url;
     const authorization = props.authorization;
@@ -50,41 +60,8 @@ export const listAllService = async (props: ListAllInterface) => {
 
         const { data: dataResponse } = response;
         const { data } = dataResponse;
-        returnedValues.rows = data.rows;
-        returnedValues.count = data.count;
-        returnedValues.ok = true;
 
-    } catch (error) {
-        const message = 'Erro ao trazer a lista.'
-        const description = 'Houve um problema ao trazer esta lista. Por favor, tente novamente.';
-
-        Notification({
-            type: 'error',
-            message,
-            description,
-            statusCode: error?.response?.status
-        });
-    } finally {
-        return returnedValues;
-    }
-}
-
-export const listAllServiceWithoutParams = async (props: RequestInterface) => {
-    const returnedValues = { ok: false, rows: [], count: 0 }
-
-    try {
-        const response = await api.get(
-            props.url,
-            {
-                headers: { authorization: props.authorization }
-            }
-        );
-
-        const { data: dataResponse } = response;
-        const { data } = dataResponse;
-        returnedValues.rows = data.rows;
-        returnedValues.count = data.count;
-        returnedValues.ok = true;
+        Object.assign(returnedValues, { ok: true, ...data })
 
     } catch (error) {
         const message = 'Erro ao trazer a lista.'
@@ -113,6 +90,7 @@ export const createService = async (props: CreateInterface) => {
 
         const { data: dataResponse } = response;
         const { data } = dataResponse;
+
         returnedValues.data = data;
         returnedValues.ok = true;
 
@@ -148,6 +126,7 @@ export const updateService = async (props: UpdateInterface) => {
 
         const { data: dataResponse } = response;
         const { data } = dataResponse;
+
         returnedValues.data = data;
         returnedValues.ok = true;
 
@@ -182,12 +161,13 @@ export const deleteService = async (props: DeleteInterface) => {
 
         const { data: dataResponse } = response;
         const { data } = dataResponse;
+
         returnedValues.data = data;
         returnedValues.ok = true;
 
         Notification({
             type: 'success',
-            message: 'Excluido.',
+            message: 'Excluído.',
             description: 'Informação excluida com sucesso.'
         });
 
