@@ -1,20 +1,12 @@
-import { Spin, Pagination, Empty, Form, Radio, Table } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { Spin, Empty, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
-import { Input, InputTextArea } from '../../components/input';
-import { ListItem } from '../../components/listItem';
-import { Modal } from '../../components/modal';
-import { CashRegisterReducerInterface } from '../../store/cashRegister/model';
+import { Input } from '../../components/input';
 import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import moment from 'moment';
 import { listService } from '../../services/crud';
-import {
-    cashRegisterStartDeleteLoading, cashRegisterStartListLoading,
-    cashRegisterStartSaveLoading, cashRegisterStopDeleteLoading,
-    cashRegisterStopListLoading, cashRegisterStopSaveLoading, cashRegisterUpdateList
-} from '../../store/cashRegister/actions';
 import {
     cashRegisterGroupSimpleStartListLoading, cashRegisterGroupSimpleStopListLoading,
     cashRegisterGroupSimpleUpdateList
@@ -23,10 +15,14 @@ import { maskDate, maskValue } from '../../util';
 import { CashRegisterGroupSimpleReducerInterface } from '../../store/cashRegisterGroupSimple/model';
 import { CashOnHandReducerInterface } from '../../store/cashOnHand/model';
 import { Select } from '../../components/select';
-import { DatePicker, RangePicker } from '../../components/datePicker';
-import { cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue } from '../../store/cashOnHand/actions';
+import { RangePicker } from '../../components/datePicker';
+import { 
+    cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue 
+} from '../../store/cashOnHand/actions';
 import { LoadingOutlined } from '@ant-design/icons';
-import { cashRegisterReportStartListLoading, cashRegisterReportUpdateList } from '../../store/cashRegisterReport/actions';
+import { 
+    cashRegisterReportStartListLoading, cashRegisterReportUpdateList 
+} from '../../store/cashRegisterReport/actions';
 import { CashRegisterReportReducerInterface } from '../../store/cashRegisterReport/model';
 
 export default function CashRegisterReport() {
@@ -37,20 +33,14 @@ export default function CashRegisterReport() {
         }
     }, []);
 
-    const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(10);
     const [total, setTotal] = useState(0);
     const [reloadList, setReloadList] = useState(0);
-    const [seletedUpdate, setSelectedUpdate] = useState('');
     const [descriptionSearch, setDescriptionSearch] = useState('');
     const [cashRegisterGroupSearch, setCashRegisterGroupSearch] = useState('');
     const [typeSearch, setTypeSearch] = useState('');
     const [dateStartSearch, setDateStartSearch] = useState(moment(new Date()));
     const [dateEndSearch, setDateEndSearch] = useState(moment(new Date()));
-    const [showModal, setShowModal] = useState(false);
 
-    const [form] = Form.useForm();
-    const buttonRef = useRef(null)
     const dispatch = useDispatch();
     const userInfo = useSelector(
         (
@@ -151,9 +141,7 @@ export default function CashRegisterReport() {
                     return { ...item, key: index +1, type, paid_in } 
                 })
             }));
-
-            console.log(data);
-            
+ 
             setTotal(data.count);
         }
     }
@@ -196,7 +184,6 @@ export default function CashRegisterReport() {
     }
 
     const handleSearchCashRegister = () => {
-        setPage(1);
         setReloadList(reloadList + 1);
     }
 
@@ -277,17 +264,17 @@ export default function CashRegisterReport() {
                     <div className="bottom">
                         <div className="col">
                             <strong>Receitas: </strong>
-                            <span>R$ 1550,00</span>
+                            <span>{maskValue(cashRegisterReportInfo.revenue)}</span>
                         </div>
 
                         <div className="col">
                             <strong>Despesas: </strong>
-                            <span>R$ 1550,00</span>
+                            <span>{maskValue(cashRegisterReportInfo.expense)}</span>
                         </div>
 
                         <div className="col">
                             <strong>Lucro: </strong>
-                            <span>R$ 1550,00</span>
+                            <span>{maskValue(cashRegisterReportInfo.profit)}</span>
                         </div>
                     </div>
                 </div>
