@@ -10,7 +10,7 @@ import {
 import HomePage from '../home';
 import CashRegisterPage from '../cash-register';
 import CashRegisterGroupPage from '../cash-register-group';
-import ReportPage from '../report';
+import CashRegisterReportPage from '../cash-register-report';
 import Router from "next/router";
 import { Modal } from "../../components/modal";
 import { Menu } from '../../components/menu';
@@ -42,7 +42,7 @@ export default function Home() {
         {
             title: 'Relatório',
             icon: <BarChartOutlined />,
-            action: () => setSelectedPage(<ReportPage />)
+            action: () => setSelectedPage(<CashRegisterReportPage />)
         },
     ]
 

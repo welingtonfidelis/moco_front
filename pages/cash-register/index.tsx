@@ -10,8 +10,7 @@ import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import moment from 'moment';
 import {
-    createService, deleteService, listAllService,
-    listAllServiceWithoutParams, updateService
+    createService, deleteService, listService, updateService
 } from '../../services/crud';
 import {
     cashRegisterStartDeleteLoading, cashRegisterStartListLoading,
@@ -29,8 +28,9 @@ import { DatePicker, RangePicker } from '../../components/datePicker';
 
 export default function CashRegister() {
     useEffect(() => {
-        haveToken(userInfo);
-        getCashRegisterGroupList();
+        if(haveToken(userInfo)) {
+            getCashRegisterGroupList();
+        }
     }, []);
 
     const [page, setPage] = useState(1);
@@ -96,10 +96,14 @@ export default function CashRegister() {
             props.cash_register_group_id = cashRegisterGroupSearch;
         }
 
-        const { rows, count } = await listAllService(props);
+        const data = await listService(props);
 
-        dispatch(cashRegisterUpdateList(rows));
-        setTotal(count);
+        if(data.ok) {
+            const { rows, count } = data;
+
+            dispatch(cashRegisterUpdateList(rows));
+            setTotal(count);
+        }
 
         dispatch(cashRegisterStopListLoading());
     }
@@ -112,9 +116,13 @@ export default function CashRegister() {
             authorization
         }
 
-        const { rows, count } = await listAllServiceWithoutParams(props);
+        const data = await listService(props);
 
-        dispatch(cashRegisterGroupSimpleUpdateList(rows));
+        if(data.ok) {
+            const { rows, count } = data;
+
+            dispatch(cashRegisterGroupSimpleUpdateList(rows));
+        }
 
         dispatch(cashRegisterGroupSimpleStopListLoading());
     }
