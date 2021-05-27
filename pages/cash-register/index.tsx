@@ -10,8 +10,7 @@ import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import moment from 'moment';
 import {
-    createService, deleteService, listService,
-    listAllServiceWithoutParams, updateService
+    createService, deleteService, listService, updateService
 } from '../../services/crud';
 import {
     cashRegisterStartDeleteLoading, cashRegisterStartListLoading,
@@ -29,8 +28,9 @@ import { DatePicker, RangePicker } from '../../components/datePicker';
 
 export default function CashRegister() {
     useEffect(() => {
-        haveToken(userInfo);
-        getCashRegisterGroupList();
+        if(haveToken(userInfo)) {
+            getCashRegisterGroupList();
+        }
     }, []);
 
     const [page, setPage] = useState(1);

@@ -51,17 +51,13 @@
 }
 
 @media (max-width: 600px) {
-    #cash-register-page .group-search-btn {
-        flex-direction: row;
+    #cash-register-page .group-search {
+        flex-direction: column;
     }
 
     #cash-register-page .group-search :not(.ant-btn) {
         margin-right: 0;
         margin-bottom: 2px;
-    }
-
-    #cash-register-page .group-search {
-        flex-direction: column;
     }
 
     #cash-register-page .group-search .button-simple {
