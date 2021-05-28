@@ -41,8 +41,27 @@
     background: #fff;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     border-top: 1px solid #dde0e2;
     padding: 7px 0;
+}
+
+#main-page .lateral-menu .lateral-menu-expand-button span {
+    height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+#main-page .lateral-menu .lateral-menu-expand-button svg {
+    transition: .5s;
+    font-size: 20px;
+}
+
+#main-page .lateral-menu .lateral-menu-expand-button svg:hover {
+    filter: brightness(.6);
+    border-radius: 50%;
+    border: 1px solid var(--color-primary);
+    cursor: pointer;
 }
 
 #main-page main .ant-menu li span {

@@ -25,6 +25,7 @@ import { maskDate, maskValue } from '../../util';
 import { CashRegisterGroupSimpleReducerInterface } from '../../store/cashRegisterGroupSimple/model';
 import { Select } from '../../components/select';
 import { DatePicker, RangePicker } from '../../components/datePicker';
+import { MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 export default function CashRegister() {
     useEffect(() => {
@@ -269,6 +270,11 @@ export default function CashRegister() {
                                     onEdit={() => handleSelectCashRegister(index)}
                                     onDelete={() => handleDeleteCashRegister(index)}
                                     onDeleteLoad={item.loadingDelete}
+                                    icon={
+                                        item.type === 'in' 
+                                            ? <PlusCircleOutlined /> 
+                                            : <MinusCircleOutlined />
+                                    }
                                 />
                             ))
 

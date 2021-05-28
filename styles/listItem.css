@@ -14,6 +14,11 @@
     background: var(--color-title-secondary);
     border-radius: 50%;
     margin-right: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 4.5rem;
 }
 
 .list-item-col1 {
