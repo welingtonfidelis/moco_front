@@ -91,18 +91,25 @@ export const downloadFileBufferService = async (props: ListInterface, fileName: 
             {
                 params: { ...props },
                 headers: { authorization },
-                responseType: 'arraybuffer'
+                responseType: 'blob'
             }
         );
 
         const { data } = response;
 
+        //open file in new tab
+        // const file = new Blob([data], { type: 'application/pdf'});
+        // const fileURL = URL.createObjectURL(file);
+        // window.open(fileURL);
+
+        //download file
         const tmpUrl = window.URL.createObjectURL(new Blob([data]));
         const link = document.createElement('a');
         link.href = tmpUrl;
         link.setAttribute('download', fileName);
         document.body.appendChild(link);
         link.click();
+        link.remove();
         
     } catch (error) {
         const message = 'Erro ao baixar o arquivo.'

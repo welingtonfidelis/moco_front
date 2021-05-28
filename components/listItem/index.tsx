@@ -7,6 +7,7 @@ interface Props {
     subtitle?: string;
     detail1?: string;
     detail2?: string;
+    icon?: any;
     onEdit: (item: any) => void;
     onDelete: (item: any) => void;
     onDeleteLoad: boolean;
@@ -14,7 +15,7 @@ interface Props {
 
 export const ListItem: React.FC<Props> = (props) => (
     <div className="list-item">
-        <div className="list-item-icon"></div>
+        <div className="list-item-icon">{props.icon}</div>
 
         <div className="list-item-col1">
             <strong>{props.title}</strong>

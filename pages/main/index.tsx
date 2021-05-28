@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
     HomeOutlined, DollarCircleOutlined,
     SnippetsOutlined, BarChartOutlined,
-    RightCircleOutlined, LeftCircleOutlined, UserOutlined, LogoutOutlined
+    RightCircleOutlined, LeftCircleOutlined, UserOutlined, LogoutOutlined, RightOutlined, LeftOutlined
 } from '@ant-design/icons';
 
 import HomePage from '../home';
@@ -89,14 +89,21 @@ export default function Home() {
                         items={menuOptions}
                     />
 
-                    <div className="lateral-menu-expand-button">
-                        <Button
-                            onClick={() => setCollapsedMenu(!collapsedMenu)}
-                            title={collapsedMenu ? 'Expandir menu' : 'Retrair menu'}
-                            shape="circle"
-                            icon={collapsedMenu ? <RightCircleOutlined /> : <LeftCircleOutlined />}
-                            size="middle"
-                        />
+                    <div 
+                        className="lateral-menu-expand-button" 
+                        
+                    >
+                        {
+                            collapsedMenu 
+                                ? <RightOutlined 
+                                    title="Expandir menu" 
+                                    onClick={() => setCollapsedMenu(!collapsedMenu)}
+                                />
+                                : <LeftOutlined 
+                                    title="Retrair menu" 
+                                    onClick={() => setCollapsedMenu(!collapsedMenu)}
+                                />
+                        }
                     </div>
                 </div>
 
