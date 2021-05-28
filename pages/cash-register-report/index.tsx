@@ -6,7 +6,7 @@ import { Input } from '../../components/input';
 import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import moment from 'moment';
-import { listService } from '../../services/crud';
+import { downloadFileBufferService, listService } from '../../services/apiRequest';
 import {
     cashRegisterGroupSimpleStartListLoading, cashRegisterGroupSimpleStopListLoading,
     cashRegisterGroupSimpleUpdateList
@@ -24,6 +24,10 @@ import {
     cashRegisterReportStartListLoading, cashRegisterReportUpdateList 
 } from '../../store/cashRegisterReport/actions';
 import { CashRegisterReportReducerInterface } from '../../store/cashRegisterReport/model';
+import { CashRegisterReportDownlaodReducerInterface } from '../../store/cashRegisterReportDownload/model';
+import { 
+    cashRegisterReportDownloadStartLoading, cashRegisterReportDownloadStopLoading 
+} from '../../store/cashRegisterReportDownload/actions';
 
 export default function CashRegisterReport() {
     useEffect(() => {
@@ -61,6 +65,11 @@ export default function CashRegisterReport() {
         (
             state: { cashRegisterReport: CashRegisterReportReducerInterface }
         ) => state.cashRegisterReport
+    );
+    const cashRegisterReportDownloadInfo = useSelector(
+        (
+            state: { cashRegisterReportDownload: CashRegisterReportDownlaodReducerInterface}
+        ) => state.cashRegisterReportDownload
     );
     const typeOptions = [
         { description: 'Entrada', value: 'in' },
@@ -102,10 +111,7 @@ export default function CashRegisterReport() {
         getCashRegisterList();
     }, [reloadList]);
 
-    const getCashRegisterList = async () => {
-        dispatch(cashRegisterReportStartListLoading());
-
-        const url = '/cash-registers/report';
+    const mountRequestProps = (url: string, download = false) => {
         const props = {
             url,
             authorization,
@@ -113,7 +119,8 @@ export default function CashRegisterReport() {
             date_start: dateStartSearch.toString(),
             date_end: dateEndSearch.toString(),
             type: null,
-            cash_register_group_id: null
+            cash_register_group_id: null,
+            download_pdf: download
         }
 
         if (descriptionSearch.length > 2) props.description = descriptionSearch;
@@ -123,6 +130,15 @@ export default function CashRegisterReport() {
         if (cashRegisterGroupSearch !== 'undefined' && cashRegisterGroupSearch !== '') {
             props.cash_register_group_id = cashRegisterGroupSearch;
         }
+
+        return props;
+    }
+
+    const getCashRegisterList = async () => {
+        dispatch(cashRegisterReportStartListLoading());
+
+        const url = '/cash-registers/report';
+        const props = mountRequestProps(url);
 
         const data = await listService(props);
 
@@ -144,6 +160,17 @@ export default function CashRegisterReport() {
  
             setTotal(data.count);
         }
+    }
+
+    const handleDownloadReport = async () => {
+        dispatch(cashRegisterReportDownloadStartLoading());
+
+        const url = '/cash-registers/report';
+        const props = mountRequestProps(url, true);
+
+        await downloadFileBufferService(props, `relatório_${maskDate(new Date())}.pdf`);
+        
+        dispatch(cashRegisterReportDownloadStopLoading());
     }
 
     const getCashRegisterGroupList = async () => {
@@ -233,11 +260,15 @@ export default function CashRegisterReport() {
                     />
 
                     <div className="group-search-btn">
-                        <ButtonPrimary onClick={() => handleSearchCashRegister()}>
+                        <ButtonPrimary onClick={handleSearchCashRegister}>
                             Buscar
                         </ButtonPrimary>
 
-                        <ButtonPrimary onClick={() => console.log('baixar')}>
+                        <ButtonPrimary 
+                            onClick={handleDownloadReport} 
+                            loading={cashRegisterReportDownloadInfo.loading}
+                            disabled={total <= 0}
+                        >
                             Baixar
                         </ButtonPrimary>
                     </div>

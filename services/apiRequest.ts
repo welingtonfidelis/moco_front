@@ -78,6 +78,45 @@ export const listService = async (props: ListInterface) => {
     }
 }
 
+export const downloadFileBufferService = async (props: ListInterface, fileName: string) => {
+    const url = props.url;
+    const authorization = props.authorization;
+
+    delete props.url;
+    delete props.authorization;
+
+    try {
+        const response = await api.get(
+            url,
+            {
+                params: { ...props },
+                headers: { authorization },
+                responseType: 'arraybuffer'
+            }
+        );
+
+        const { data } = response;
+
+        const tmpUrl = window.URL.createObjectURL(new Blob([data]));
+        const link = document.createElement('a');
+        link.href = tmpUrl;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        
+    } catch (error) {
+        const message = 'Erro ao baixar o arquivo.'
+        const description = 'Houve um problema ao baixar este arquivo. Por favor, tente novamente.';
+
+        Notification({
+            type: 'error',
+            message,
+            description,
+            statusCode: error?.response?.status
+        });
+    }
+}
+
 export const createService = async (props: CreateInterface) => {
     const returnedValues = { ok: false, data: {} }
 

@@ -8,6 +8,7 @@ import cashRegisterGroupSimple from './cashRegisterGroupSimple/reducers';
 import cashRegister from './cashRegister/reducers';
 import cashOnHand from './cashOnHand/reducers';
 import cashRegisterReport from './cashRegisterReport/reducers';
+import cashRegisterReportDownload from './cashRegisterReportDownload/reducers';
 
 const reducers = combineReducers({
     user,
@@ -16,7 +17,8 @@ const reducers = combineReducers({
     cashRegisterGroupSimple,
     cashRegister,
     cashOnHand,
-    cashRegisterReport
+    cashRegisterReport,
+    cashRegisterReportDownload
 });
 
 const makeStore = () => {

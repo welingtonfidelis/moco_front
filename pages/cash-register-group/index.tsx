@@ -10,7 +10,7 @@ import { UserReducerInterface } from '../../store/user/model';
 import { haveToken } from '../../services/auth';
 import {
     createService, deleteService, listService, updateService 
-} from '../../services/crud';
+} from '../../services/apiRequest';
 import {
     cashRegisterGroupStartListLoading, cashRegisterGroupStopListLoading, 
     cashRegisterGroupStartSaveLoading, cashRegisterGroupStopSaveLoading, 
