@@ -11,7 +11,7 @@ import { haveToken } from '../../services/auth';
 import moment from 'moment';
 import {
     createService, deleteService, listService, updateService
-} from '../../services/crud';
+} from '../../services/apiRequest';
 import {
     cashRegisterStartDeleteLoading, cashRegisterStartListLoading,
     cashRegisterStartSaveLoading, cashRegisterStopDeleteLoading,
