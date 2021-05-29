@@ -1,4 +1,5 @@
-import ApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic'
+const ApexChart = dynamic(() => import('react-apexcharts'), {ssr:false})
 
 interface PieProps {
     labels: string[];

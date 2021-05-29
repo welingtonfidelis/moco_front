@@ -11,7 +11,7 @@ export default function Home() {
     const barData = {
         labels: ['01/05/2021', '01/05/2021', '03/05/2021', '06/05/2021',],
         seriesName: "R$",
-        seriesData: [25.50, 130,50,9.50]
+        seriesData: [25.50, 130, 50, 9.50]
     }
 
     return (
