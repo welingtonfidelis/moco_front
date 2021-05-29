@@ -1,3 +1,4 @@
+import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -113,30 +114,48 @@ export default function Home() {
                 <div className="home-chart">
                     <strong>Registros do mês de {actualMonthName}</strong>
 
-                    <div className="cash-register-resume">
-                        <span>Caixa atual: {maskValue(cashOnHandInfo.value)}</span>
-                        <span>Receitas: {maskValue(cashRegisterReportInfo.revenue)}</span>
-                        <span>Despesas: {maskValue(cashRegisterReportInfo.expense)}</span>
-                        <span>Lucro: {maskValue(cashRegisterReportInfo.profit)}</span>
+                    <div className="home-cash-register-resume">
+                        <span>Total em caixa: {maskValue(cashOnHandInfo.value)}</span>
+                        <span>Receitas do mês: {maskValue(cashRegisterReportInfo.revenue)}</span>
+                        <span>Despesas do mês: {maskValue(cashRegisterReportInfo.expense)}</span>
+                        <span>Lucro do mês: {maskValue(cashRegisterReportInfo.profit)}</span>
                     </div>
                 </div>
 
                 <div className="home-chart">
                     <strong>Entradas e Saídas do mês de {actualMonthName}</strong>
 
-                    <PieChart labels={pieData.labels} series={pieData.series} />
+                    <div className="home-cash-register-chart">
+                        {
+                            cashOnHandInfo.loading
+                                ? <LoadingOutlined />
+                                : <PieChart labels={pieData.labels} series={pieData.series} />
+                        }
+                    </div>
                 </div>
 
                 <div className="home-chart">
                     <strong>Entradas do mês de {actualMonthName}</strong>
 
-                    <BarChart labels={barDataIn.labels} seriesData={barDataIn.seriesData} seriesName={barDataIn.seriesName} />
+                    <div className="home-cash-register-chart">
+                        {
+                            cashRegisterReportInfo.loadingList
+                                ? <LoadingOutlined />
+                                : <BarChart labels={barDataIn.labels} seriesData={barDataIn.seriesData} seriesName={barDataIn.seriesName} />
+                        }
+                    </div>
                 </div>
 
                 <div className="home-chart">
                     <strong>Saídas do mês de {actualMonthName}</strong>
 
-                    <BarChart labels={barDataOut.labels} seriesData={barDataOut.seriesData} seriesName={barDataOut.seriesName} />
+                    <div className="home-cash-register-chart">
+                        {
+                            cashRegisterReportInfo.loadingList
+                                ? <LoadingOutlined />
+                                : <BarChart labels={barDataOut.labels} seriesData={barDataOut.seriesData} seriesName={barDataOut.seriesName} />
+                        }
+                    </div>
                 </div>
             </div>
         </div>

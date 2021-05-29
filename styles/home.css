@@ -34,12 +34,20 @@
     align-items: center;
 }
 
-#home-page .home-charts .home-chart .cash-register-resume {
+#home-page .home-cash-register-resume {
     flex: 1;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+#home-page .home-cash-register-chart {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 @media (max-width: 600px) {

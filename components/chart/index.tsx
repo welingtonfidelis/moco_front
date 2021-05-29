@@ -19,10 +19,16 @@ export const PieChart: React.FC<PieProps> = (props) => (
                 labels: props.labels,
                 legend: {
                     position: 'bottom'
+                },
+                chart: {
+                    toolbar: {
+                        show: true
+                    }
                 }
             }}
             series={props.series.map(item => parseFloat(item.toFixed(2)))}
             type="pie"
+            height="100%"
         />
     </div>
 )
@@ -37,6 +43,11 @@ export const BarChart: React.FC<BarProps> = (props) => (
                 xaxis: {
                     categories: props.labels
                 },
+                plotOptions: {
+                    bar: {
+                        distributed: true
+                    }
+                },
             }}
             series={[
                 {
@@ -45,6 +56,7 @@ export const BarChart: React.FC<BarProps> = (props) => (
                 }
             ]}
             type="bar"
+            height="93%"
         />
     </div>
 )
