@@ -14,7 +14,8 @@
 
 #home-page .home-charts {
     height: calc(100vh - 115px);
-    overflow-y: auto;
+    width: calc(100vw - 76px);
+    overflow: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
@@ -31,6 +32,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#home-page .home-charts .home-chart .cash-register-resume {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 @media (max-width: 600px) {

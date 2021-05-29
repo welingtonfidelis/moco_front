@@ -1,17 +1,108 @@
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BarChart, PieChart } from '../../components/chart';
+import { listService } from '../../services/apiRequest';
+import { haveToken } from '../../services/auth';
+import { cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue } from '../../store/cashOnHand/actions';
+import { CashOnHandReducerInterface } from '../../store/cashOnHand/model';
+import { cashRegisterReportStartListLoading, cashRegisterReportUpdateList } from '../../store/cashRegisterReport/actions';
+import { CashRegisterReportReducerInterface } from '../../store/cashRegisterReport/model';
+import { UserReducerInterface } from '../../store/user/model';
+import { maskDate, maskValue } from '../../util';
 
 export default function Home() {
-    // const userInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
+    const [actualMonthName] = useState(moment().subtract(1, "month").startOf("month").format('MMMM'));
 
+    const dispatch = useDispatch();
+    const userInfo = useSelector(
+        (
+            state: { user: UserReducerInterface }
+        ) => state.user
+    );
+    const cashOnHandInfo = useSelector(
+        (
+            state: { cashOnHand: CashOnHandReducerInterface }
+        ) => state.cashOnHand
+    );
+    const cashRegisterReportInfo = useSelector(
+        (
+            state: { cashRegisterReport: CashRegisterReportReducerInterface }
+        ) => state.cashRegisterReport
+    );
+    const authorization = userInfo.token;
     const pieData = {
         labels: ['Entrada', 'Saída'],
-        series: [250.50, 120.90]
+        series: [cashRegisterReportInfo.profit, cashRegisterReportInfo.expense]
     }
 
-    const barData = {
-        labels: ['01/05/2021', '01/05/2021', '03/05/2021', '06/05/2021',],
+    const barDataIn = {
+        labels: cashRegisterReportInfo.list.filter(item => item.type === 'in').map(item => item.paid_in + ''),
         seriesName: "R$",
-        seriesData: [25.50, 130, 50, 9.50]
+        seriesData: cashRegisterReportInfo.list.filter(item => item.type === 'in').map(item => item.value)
+    }
+
+    const barDataOut = {
+        labels: cashRegisterReportInfo.list.filter(item => item.type === 'out').map(item => item.paid_in + ''),
+        seriesName: "R$",
+        seriesData: cashRegisterReportInfo.list.filter(item => item.type === 'out').map(item => item.value)
+    }
+
+    useEffect(() => {
+        if (haveToken(userInfo)) {
+            getCashRegisterReportList();
+            getCashOnHandValue();
+        }
+    }, []);
+
+    const getCashRegisterReportList = async () => {
+        dispatch(cashRegisterReportStartListLoading());
+
+        const startOfMonth = moment().clone().startOf('month');
+        const endOfMonth = moment().clone().endOf('month');
+
+        const url = '/cash-registers/report';
+        const props = {
+            url,
+            authorization,
+            date_start: startOfMonth.toString(),
+            date_end: endOfMonth.toString()
+        }
+
+        const data = await listService(props);
+
+        if (data.ok) {
+            dispatch(cashRegisterReportUpdateList({
+                loadingList: false,
+                date_end: data.date_end,
+                date_start: data.date_start,
+                expense: data.expense,
+                profit: data.profit,
+                revenue: data.revenue,
+                list: data.rows.map((item, index) => {
+                    const paid_in = maskDate(new Date(item.paid_in));
+
+                    return { ...item, key: index + 1, paid_in }
+                })
+            }));
+        }
+    }
+    const getCashOnHandValue = async () => {
+        dispatch(cashOnHandStartLoading());
+
+        const props = {
+            url: '/cash-registers/report/cash-on-hand',
+            authorization
+        }
+
+        const data = await listService(props);
+
+        if (data.ok) {
+            const { total } = data;
+            dispatch(cashOnHandUpdateValue(total));
+        }
+
+        dispatch(cashOnHandStopLoading());
     }
 
     return (
@@ -20,26 +111,32 @@ export default function Home() {
 
             <div className="home-charts">
                 <div className="home-chart">
-                    <span>Caixa atual: R$ 1550,00</span>
-                    <span>Receitas: R$500,00</span>
-                    <span>Despesas: R$500,00</span>
-                    <span>Lucro: R$500,00</span>
+                    <strong>Registros do mês de {actualMonthName}</strong>
+
+                    <div className="cash-register-resume">
+                        <span>Caixa atual: {maskValue(cashOnHandInfo.value)}</span>
+                        <span>Receitas: {maskValue(cashRegisterReportInfo.revenue)}</span>
+                        <span>Despesas: {maskValue(cashRegisterReportInfo.expense)}</span>
+                        <span>Lucro: {maskValue(cashRegisterReportInfo.profit)}</span>
+                    </div>
                 </div>
 
                 <div className="home-chart">
-                    <strong>Entradas e Saídas do mês de Maio</strong>
+                    <strong>Entradas e Saídas do mês de {actualMonthName}</strong>
 
                     <PieChart labels={pieData.labels} series={pieData.series} />
                 </div>
 
                 <div className="home-chart">
-                    <strong>Entradas do mês de Maio</strong>
+                    <strong>Entradas do mês de {actualMonthName}</strong>
 
-                    <BarChart labels={barData.labels} seriesData={barData.seriesData} seriesName={barData.seriesName} />
+                    <BarChart labels={barDataIn.labels} seriesData={barDataIn.seriesData} seriesName={barDataIn.seriesName} />
                 </div>
 
                 <div className="home-chart">
-                    <BarChart labels={barData.labels} seriesData={barData.seriesData} seriesName={barData.seriesName} />
+                    <strong>Saídas do mês de {actualMonthName}</strong>
+
+                    <BarChart labels={barDataOut.labels} seriesData={barDataOut.seriesData} seriesName={barDataOut.seriesName} />
                 </div>
             </div>
         </div>

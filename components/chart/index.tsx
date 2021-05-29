@@ -21,7 +21,7 @@ export const PieChart: React.FC<PieProps> = (props) => (
                     position: 'bottom'
                 }
             }}
-            series={props.series}
+            series={props.series.map(item => parseFloat(item.toFixed(2)))}
             type="pie"
         />
     </div>
@@ -32,16 +32,16 @@ export const BarChart: React.FC<BarProps> = (props) => (
         <ApexChart
             options={{
                 chart: {
-                    id: "basic-bar"
+                    id: "basic-bar",
                 },
                 xaxis: {
                     categories: props.labels
-                }
+                },
             }}
             series={[
                 {
                     name: props.seriesName,
-                    data: props.seriesData
+                    data: props.seriesData.map(item => parseFloat(item.toFixed(2)))
                 }
             ]}
             type="bar"
