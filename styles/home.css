@@ -1,0 +1,63 @@
+#home-page {
+    display: flex;
+    flex-direction: column;
+    /* height: calc(100% - 5px); */
+    background: #fff;
+    margin: 5px 0 0 5px;
+    padding: 8px;
+}
+
+#home-page h3 {
+    font-size: 2rem;
+    color: var(--color-title-primary);
+}
+
+#home-page .home-charts {
+    height: calc(100vh - 115px);
+    width: calc(100vw - 76px);
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 6px 6px;
+    grid-template-areas:
+      ". ."
+      ". .";
+}
+
+#home-page .home-charts .home-chart {
+    border: 1px solid var(--color-title-primary);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home-page .home-cash-register-resume {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#home-page .home-cash-register-chart {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    #home-page .home-charts {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-template-areas:
+          "."
+          "."
+          "."
+          "."
+    }
+}

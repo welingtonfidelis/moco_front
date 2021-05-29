@@ -16,27 +16,20 @@ import { CashRegisterGroupSimpleReducerInterface } from '../../store/cashRegiste
 import { CashOnHandReducerInterface } from '../../store/cashOnHand/model';
 import { Select } from '../../components/select';
 import { RangePicker } from '../../components/datePicker';
-import { 
-    cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue 
+import {
+    cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue
 } from '../../store/cashOnHand/actions';
 import { LoadingOutlined } from '@ant-design/icons';
-import { 
-    cashRegisterReportStartListLoading, cashRegisterReportUpdateList 
+import {
+    cashRegisterReportStartListLoading, cashRegisterReportUpdateList
 } from '../../store/cashRegisterReport/actions';
 import { CashRegisterReportReducerInterface } from '../../store/cashRegisterReport/model';
 import { CashRegisterReportDownlaodReducerInterface } from '../../store/cashRegisterReportDownload/model';
-import { 
-    cashRegisterReportDownloadStartLoading, cashRegisterReportDownloadStopLoading 
+import {
+    cashRegisterReportDownloadStartLoading, cashRegisterReportDownloadStopLoading
 } from '../../store/cashRegisterReportDownload/actions';
 
 export default function CashRegisterReport() {
-    useEffect(() => {
-        if (haveToken(userInfo)) {
-            getCashRegisterGroupList();
-            getCashOnHandValue();
-        }
-    }, []);
-
     const [total, setTotal] = useState(0);
     const [reloadList, setReloadList] = useState(0);
     const [descriptionSearch, setDescriptionSearch] = useState('');
@@ -68,7 +61,7 @@ export default function CashRegisterReport() {
     );
     const cashRegisterReportDownloadInfo = useSelector(
         (
-            state: { cashRegisterReportDownload: CashRegisterReportDownlaodReducerInterface}
+            state: { cashRegisterReportDownload: CashRegisterReportDownlaodReducerInterface }
         ) => state.cashRegisterReportDownload
     );
     const typeOptions = [
@@ -106,6 +99,13 @@ export default function CashRegisterReport() {
         },
     ];
     const authorization = userInfo.token;
+
+    useEffect(() => {
+        if (haveToken(userInfo)) {
+            getCashRegisterGroupList();
+            getCashOnHandValue();
+        }
+    }, []);
 
     useEffect(() => {
         getCashRegisterList();
@@ -151,13 +151,13 @@ export default function CashRegisterReport() {
                 profit: data.profit,
                 revenue: data.revenue,
                 list: data.rows.map((item, index) => {
-                    const type = item.type === 'in' ? 'Entrada' : 'Saida'; 
+                    const type = item.type === 'in' ? 'Entrada' : 'Saida';
                     const paid_in = maskDate(new Date(item.paid_in));
-                    
-                    return { ...item, key: index +1, type, paid_in } 
+
+                    return { ...item, key: index + 1, type, paid_in }
                 })
             }));
- 
+
             setTotal(data.count);
         }
     }
@@ -169,7 +169,7 @@ export default function CashRegisterReport() {
         const props = mountRequestProps(url, true);
 
         await downloadFileBufferService(props, `relatório_${maskDate(new Date())}.pdf`);
-        
+
         dispatch(cashRegisterReportDownloadStopLoading());
     }
 
@@ -264,8 +264,8 @@ export default function CashRegisterReport() {
                             Buscar
                         </ButtonPrimary>
 
-                        <ButtonPrimary 
-                            onClick={handleDownloadReport} 
+                        <ButtonPrimary
+                            onClick={handleDownloadReport}
                             loading={cashRegisterReportDownloadInfo.loading}
                             disabled={total <= 0}
                         >
@@ -313,10 +313,10 @@ export default function CashRegisterReport() {
                 <div className="group-list">
                     {
                         total > 0
-                            ? <Table 
-                                columns={tableColumns} 
-                                dataSource={cashRegisterReportInfo.list} 
-                                pagination={{ hideOnSinglePage: true, position: ['bottomCenter'] }} 
+                            ? <Table
+                                columns={tableColumns}
+                                dataSource={cashRegisterReportInfo.list}
+                                pagination={{ hideOnSinglePage: true, position: ['bottomCenter'] }}
                             />
 
                             : <Empty description="Esta lista está vazia." />
