@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
 import { Input } from '../../components/input';
 import { UserReducerInterface } from '../../store/user/model';
-import { haveToken } from '../../services/auth';
+import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
 import { downloadFileBufferService, listService } from '../../services/apiRequest';
 import {
@@ -28,6 +28,7 @@ import { CashRegisterReportDownlaodReducerInterface } from '../../store/cashRegi
 import {
     cashRegisterReportDownloadStartLoading, cashRegisterReportDownloadStopLoading
 } from '../../store/cashRegisterReportDownload/actions';
+import { GetServerSideProps } from 'next';
 
 export default function CashRegisterReport() {
     const [total, setTotal] = useState(0);
@@ -39,11 +40,7 @@ export default function CashRegisterReport() {
     const [dateEndSearch, setDateEndSearch] = useState(moment(new Date()));
 
     const dispatch = useDispatch();
-    const userInfo = useSelector(
-        (
-            state: { user: UserReducerInterface }
-        ) => state.user
-    );
+
     const cashOnHandInfo = useSelector(
         (
             state: { cashOnHand: CashOnHandReducerInterface }
@@ -98,13 +95,10 @@ export default function CashRegisterReport() {
             dataIndex: 'paid_in',
         },
     ];
-    const authorization = userInfo.token;
 
     useEffect(() => {
-        if (haveToken(userInfo)) {
-            getCashRegisterGroupList();
-            getCashOnHandValue();
-        }
+        getCashRegisterGroupList();
+        getCashOnHandValue();
     }, []);
 
     useEffect(() => {
@@ -114,7 +108,6 @@ export default function CashRegisterReport() {
     const mountRequestProps = (url: string, download = false) => {
         const props = {
             url,
-            authorization,
             description: null,
             date_start: dateStartSearch.toString(),
             date_end: dateEndSearch.toString(),
@@ -178,7 +171,6 @@ export default function CashRegisterReport() {
 
         const props = {
             url: '/cash-register-groups/list-simple',
-            authorization
         }
 
         const data = await listService(props);
@@ -197,7 +189,6 @@ export default function CashRegisterReport() {
 
         const props = {
             url: '/cash-registers/report/cash-on-hand',
-            authorization
         }
 
         const data = await listService(props);
@@ -325,4 +316,21 @@ export default function CashRegisterReport() {
             </Spin>
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const token = handleHaveToken(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}
+    }
 }

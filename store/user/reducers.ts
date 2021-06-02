@@ -1,10 +1,13 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { LOGIN, LOGOUT } from "./types";
+import { setCookie, destroyCookie } from 'nookies';
+import { api } from "../../services/api";
+import { LOGIN, LOGOUT, START_LOGIN_LOAD, STOP_LOGIN_LOAD, UPDATE_TOKEN } from "./types";
 
 const initialState = {
     name: null,
     email: null,
-    token: null
+    token: null,
+    loadingLogin: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -14,12 +17,31 @@ const reducer = (state = initialState, action) => {
         }
 
         case LOGIN: {
-            const newState = { ...state, ...action.payload }
+            setCookie(undefined, 'moco_user_token', action.payload.token);
+
+            const newState = { ...state, loadingLogin: false, ...action.payload }
             return newState;
         }
 
         case LOGOUT: {
+            destroyCookie(undefined, 'moco_user_token');
+
             const newState = { name: null, email: null, token: null }
+            return newState;
+        }
+
+        case START_LOGIN_LOAD: {
+            const newState = { ...state, loadingLogin: true }
+            return newState;
+        }
+
+        case STOP_LOGIN_LOAD: {
+            const newState = { ...state, loadingLogin: false }
+            return newState;
+        }
+
+        case UPDATE_TOKEN: {
+            const newState = { ...state, token: action.payload }
             return newState;
         }
 

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
     HomeOutlined, DollarCircleOutlined,
     SnippetsOutlined, BarChartOutlined,
-    RightCircleOutlined, LeftCircleOutlined, UserOutlined, LogoutOutlined, RightOutlined, LeftOutlined
+    UserOutlined, LogoutOutlined,
 } from '@ant-design/icons';
 
 import HomePage from '../home';
@@ -14,11 +14,12 @@ import CashRegisterReportPage from '../cash-register-report';
 import Router from "next/router";
 import { Modal } from "../../components/modal";
 import { Menu } from '../../components/menu';
-import { logout } from "../../store/user/actions";
+import { userLogout } from "../../store/user/actions";
+import { GetServerSideProps } from "next";
+import { handleHaveToken } from "../../services/auth";
 
 export default function Home() {
     const [selectedPage, setSelectedPage] = useState(<HomePage />);
-    const [collapsedMenu, setCollapsedMenu] = useState(true);
     const [showModal, setShowModal] = useState(false);
 
     const dispatch = useDispatch();
@@ -57,7 +58,7 @@ export default function Home() {
 
     const handleLogout = () => {
         setShowModal(false);
-        dispatch(logout());
+        dispatch(userLogout());
 
         Router.replace('/');
     }
@@ -85,26 +86,9 @@ export default function Home() {
                     <Menu
                         defaultSelectedKeys={['1']}
                         mode="inline"
-                        inlineCollapsed={collapsedMenu}
+                        inlineCollapsed={true}
                         items={menuOptions}
                     />
-
-                    <div 
-                        className="lateral-menu-expand-button" 
-                        
-                    >
-                        {
-                            collapsedMenu 
-                                ? <RightOutlined 
-                                    title="Expandir menu" 
-                                    onClick={() => setCollapsedMenu(!collapsedMenu)}
-                                />
-                                : <LeftOutlined 
-                                    title="Retrair menu" 
-                                    onClick={() => setCollapsedMenu(!collapsedMenu)}
-                                />
-                        }
-                    </div>
                 </div>
 
                 <div className="page-container">
@@ -124,4 +108,21 @@ export default function Home() {
             </Modal>
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const token = handleHaveToken(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}
+    }
 }

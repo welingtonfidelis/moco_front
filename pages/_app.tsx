@@ -15,16 +15,21 @@ import '../styles/cashRegisterReport.css';
 import '../styles/home.css';
 
 import { storeWrapper } from '../store';
+import { AuthProvider } from '../contexts/AuthContext';
 
 moment.updateLocale('pt', {
-  months : [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho",
-      "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  months: [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho",
+    "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ]
 });
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
+  )
 }
 
 export default storeWrapper.withRedux(MyApp);
