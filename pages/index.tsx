@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input, InputPassword } from '../components/input';
 import { ButtonPrimary } from '../components/button';
 import { UserOutlined } from '@ant-design/icons';
-import { login } from '../store/user/actions';
+import { 
+  userLogin, userStartLoginLoading, userStopLoginLoading 
+} from '../store/user/actions';
 import { api } from '../services/api';
 import { Notification } from '../components/notification';
 import { Form } from 'antd';
-import { LoginReducerInterface } from '../store/login/model';
-import { loginStartLoading, loginStopLoading } from '../store/login/actions';
+import { UserReducerInterface } from '../store/user/model';
 
 export default function Home() {
   const [user, setUser] = useState('');
@@ -18,19 +19,20 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const dispatch = useDispatch();
-  const loginInfo = useSelector((state: { login: LoginReducerInterface }) => state.login);
+  const loginInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
 
   const handleLogin = async () => {
     try {
-      dispatch(loginStartLoading());
+      dispatch(userStartLoginLoading());
 
       const response = await api.post('/users/login', { user, password });
 
       const { data: dataResponse } = response;
       const { data } = dataResponse;
 
-      dispatch(login(data));
-      dispatch(loginStopLoading());
+      api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+
+      dispatch(userLogin(data));
 
       Notification({
         type: 'success',
@@ -41,7 +43,7 @@ export default function Home() {
       Router.replace('/main');
 
     } catch (error) {
-      dispatch(loginStopLoading());
+      dispatch(userStopLoginLoading());
 
       setErrorMessage('Usuário ou senha incorretos');
 
@@ -107,7 +109,7 @@ export default function Home() {
 
           <ButtonPrimary
             htmlType="submit"
-            loading={loginInfo.loading}
+            loading={loginInfo.loadingLogin}
           >
             Entrar
             </ButtonPrimary>

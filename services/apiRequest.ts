@@ -3,7 +3,6 @@ import { api } from "./api";
 
 interface RequestInterface {
     url: string;
-    authorization: string;
 }
 
 interface ListInterface extends RequestInterface {
@@ -44,17 +43,14 @@ export const listService = async (props: ListInterface) => {
     const returnedValues: ResponseDataInterface = { ok: false }
 
     const url = props.url;
-    const authorization = props.authorization;
 
     delete props.url;
-    delete props.authorization;
 
     try {
         const response = await api.get(
             url,
             {
                 params: { ...props },
-                headers: { authorization }
             }
         );
 
@@ -80,17 +76,14 @@ export const listService = async (props: ListInterface) => {
 
 export const downloadFileBufferService = async (props: ListInterface, fileName: string) => {
     const url = props.url;
-    const authorization = props.authorization;
 
     delete props.url;
-    delete props.authorization;
 
     try {
         const response = await api.get(
             url,
             {
                 params: { ...props },
-                headers: { authorization },
                 responseType: 'blob'
             }
         );
@@ -131,7 +124,6 @@ export const createService = async (props: CreateInterface) => {
         const response = await api.post(
             props.url,
             props.values,
-            { headers: { authorization: props.authorization } }
         );
 
         const { data: dataResponse } = response;
@@ -167,7 +159,6 @@ export const updateService = async (props: UpdateInterface) => {
         const response = await api.put(
             `${props.url}/${props.id}`,
             props.values,
-            { headers: { authorization: props.authorization } }
         );
 
         const { data: dataResponse } = response;
@@ -202,7 +193,6 @@ export const deleteService = async (props: DeleteInterface) => {
     try {
         const response = await api.delete(
             `${props.url}/${props.id}`,
-            { headers: { authorization: props.authorization } }
         );
 
         const { data: dataResponse } = response;

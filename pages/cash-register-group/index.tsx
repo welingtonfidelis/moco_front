@@ -6,8 +6,7 @@ import { Input, InputSearch, InputTextArea } from '../../components/input';
 import { ListItem } from '../../components/listItem';
 import { Modal } from '../../components/modal';
 import { CashRegisterGroupReducerInterface } from '../../store/cashRegisterGroup/model';
-import { UserReducerInterface } from '../../store/user/model';
-import { haveToken } from '../../services/auth';
+import { handleHaveToken } from '../../services/auth';
 import {
     createService, deleteService, listService, updateService 
 } from '../../services/apiRequest';
@@ -17,12 +16,9 @@ import {
     cashRegisterGroupUpdateList, cashRegisterGroupStartDeleteLoading, 
     cashRegisterGroupStopDeleteLoading
 } from '../../store/cashRegisterGroup/actions';
+import { GetServerSideProps } from 'next';
 
 export default function CashRegisterGroup() {
-    useEffect(() => {
-        haveToken(userInfo);
-    }, []);
-
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [total, setTotal] = useState(0);
@@ -34,14 +30,11 @@ export default function CashRegisterGroup() {
     const [form] = Form.useForm();
     const buttonRef = useRef(null)
     const dispatch = useDispatch();
-    const userInfo = useSelector(
-        (state: { user: UserReducerInterface }) => state.user
-    );
+
     const cashRegisterGroupInfo = useSelector(
         (state: { cashRegisterGroup: CashRegisterGroupReducerInterface }) => state.cashRegisterGroup
     );
     const url = '/cash-register-groups';
-    const authorization = userInfo.token;
 
     useEffect(() => {
         getCashRegisterGroupList();
@@ -54,7 +47,6 @@ export default function CashRegisterGroup() {
             url,
             limit,
             page,
-            authorization,
             description: null
         }
 
@@ -81,7 +73,6 @@ export default function CashRegisterGroup() {
                 id: seletedUpdate,
                 url,
                 values,
-                authorization
             });
 
             noErrors = ok;
@@ -90,7 +81,6 @@ export default function CashRegisterGroup() {
             const { ok } = await createService({
                 url,
                 values,
-                authorization
             });
 
             noErrors = ok;
@@ -132,7 +122,6 @@ export default function CashRegisterGroup() {
         const { ok } = await deleteService({
             id, 
             url,
-            authorization 
         });
 
         dispatch(cashRegisterGroupStopDeleteLoading(index));
@@ -221,4 +210,21 @@ export default function CashRegisterGroup() {
             </Modal>
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const token = handleHaveToken(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}
+    }
 }
