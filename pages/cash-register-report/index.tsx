@@ -68,30 +68,30 @@ export default function CashRegisterReport() {
         {
             title: 'Tipo',
             dataIndex: 'type',
-            sorter: (a, b) => a.type.length - b.type.length,
-            sortDirections: ['ascend', 'descend', 'ascend'],
+            // sorter: (a, b) => a.type.length - b.type.length,
+            // sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Descrição',
             dataIndex: 'description',
-            sorter: (a, b) => a.description.length - b.description.length,
-            sortDirections: ['ascend', 'descend', 'ascend'],
+            // sorter: (a, b) => a.description.length - b.description.length,
+            // sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Grupo',
             dataIndex: 'cash_register_group_description',
-            sorter: (a, b) => a.cash_register_group_description.length - b.cash_register_group_description.length,
-            sortDirections: ['ascend', 'descend', 'ascend'],
+            // sorter: (a, b) => a.cash_register_group_description.length - b.cash_register_group_description.length,
+            // sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Valor',
             dataIndex: 'value',
-            sorter: (a, b) => a.value - b.value,
+            // sorter: (a, b) => a.value - b.value,
         },
         {
             title: 'Data',
             dataIndex: 'paid_in',
-            sorter: (a, b) => moment(a.paid_in).unix() - moment(b.paid_in).unix()
+            // sorter: (a, b) => moment(a.paid_in).unix() - moment(b.paid_in).unix()
         },
     ];
 
