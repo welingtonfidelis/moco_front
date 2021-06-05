@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarChart, PieChart } from '../../components/chart';
-import { listService } from '../../services/apiRequest';
+import { getService } from '../../services/apiRequest';
 import { handleHaveToken } from '../../services/auth';
 import { 
     cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue 
@@ -66,9 +66,9 @@ export default function Home() {
             date_end: endOfMonth.toString()
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             dispatch(cashRegisterReportUpdateList({
                 loadingList: false,
                 date_end: data.date_end,
@@ -91,9 +91,9 @@ export default function Home() {
             url: '/cash-registers/report/cash-on-hand',
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             const { total } = data;
             dispatch(cashOnHandUpdateValue(total));
         }

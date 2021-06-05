@@ -8,10 +8,9 @@ import { UserOutlined } from '@ant-design/icons';
 import { 
   userLogin, userStartLoginLoading, userStopLoginLoading 
 } from '../store/user/actions';
-import { api } from '../services/api';
-import { Notification } from '../components/notification';
 import { Form } from 'antd';
 import { UserReducerInterface } from '../store/user/model';
+import { postService } from '../services/apiRequest';
 
 export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,40 +19,33 @@ export default function Home() {
   const loginInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
 
   const handleLogin = async (values: any) => {
-    try {
       dispatch(userStartLoginLoading());
 
-      const response = await api.post('/users/login', values);
+      const { ok, data } = await postService({
+        url: '/users/login',
+        values,
+        errorMessage: {
+          title: 'Falha!',
+          message: 'Houve um erro ao efetuar o login. Por favor, ' +
+          'confirme se seu usuário e senha estão corretos.'
+        },
+        successMessage: {
+          title: 'Sucesso!',
+          message: 'Seja bem vindo(a)'
+        },
+        validationToken: false
+      })
 
-      const { data: dataResponse } = response;
-      const { data } = dataResponse;
-
-      api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
-
-      dispatch(userLogin(data));
-
-      Notification({
-        type: 'success',
-        message: 'Sucesso',
-        description: `Seja bem vindo(a) ${data.name}.`
-      });
-
-      Router.replace('/main');
-
-    } catch (error) {
       dispatch(userStopLoginLoading());
 
-      setErrorMessage('Usuário ou senha incorretos');
+      if(!ok) {
+        setErrorMessage('Usuário ou senha incorretos');
 
-      const message = 'Houve um erro ao efetuar o login. Por favor, ' +
-        'confirme se seu usuário e senha estão corretos.';
+        return;
+      }
 
-      Notification({
-        type: 'error',
-        message: 'Login',
-        description: message,
-      });
-    }
+      dispatch(userLogin(data));
+      Router.replace('/main');
   }
 
   return (
@@ -109,7 +101,7 @@ export default function Home() {
             </ButtonPrimary>
         </Form>
 
-        <a href="#">Esqueci minha senha</a>
+        <a onClick={() => Router.push('/reset-password')}>Esqueci minha senha</a>
 
         <a href="#">Não tenho cadastro</a>
       </main>
