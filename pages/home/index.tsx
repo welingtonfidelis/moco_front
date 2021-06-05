@@ -1,26 +1,26 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarChart, PieChart } from '../../components/chart';
 import { listService } from '../../services/apiRequest';
-import { haveToken } from '../../services/auth';
-import { cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue } from '../../store/cashOnHand/actions';
+import { handleHaveToken } from '../../services/auth';
+import { 
+    cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue 
+} from '../../store/cashOnHand/actions';
 import { CashOnHandReducerInterface } from '../../store/cashOnHand/model';
-import { cashRegisterReportStartListLoading, cashRegisterReportUpdateList } from '../../store/cashRegisterReport/actions';
+import { 
+    cashRegisterReportStartListLoading, cashRegisterReportUpdateList 
+} from '../../store/cashRegisterReport/actions';
 import { CashRegisterReportReducerInterface } from '../../store/cashRegisterReport/model';
-import { UserReducerInterface } from '../../store/user/model';
 import { maskDate, maskValue } from '../../util';
 
 export default function Home() {
     const [actualMonthName] = useState(moment().subtract(1, "month").startOf("month").format('MMMM'));
 
     const dispatch = useDispatch();
-    const userInfo = useSelector(
-        (
-            state: { user: UserReducerInterface }
-        ) => state.user
-    );
+
     const cashOnHandInfo = useSelector(
         (
             state: { cashOnHand: CashOnHandReducerInterface }
@@ -31,7 +31,6 @@ export default function Home() {
             state: { cashRegisterReport: CashRegisterReportReducerInterface }
         ) => state.cashRegisterReport
     );
-    const authorization = userInfo.token;
     const pieData = {
         labels: ['Entrada', 'Saída'],
         series: [cashRegisterReportInfo.profit, cashRegisterReportInfo.expense]
@@ -50,10 +49,8 @@ export default function Home() {
     }
 
     useEffect(() => {
-        if (haveToken(userInfo)) {
             getCashRegisterReportList();
             getCashOnHandValue();
-        }
     }, []);
 
     const getCashRegisterReportList = async () => {
@@ -65,7 +62,6 @@ export default function Home() {
         const url = '/cash-registers/report';
         const props = {
             url,
-            authorization,
             date_start: startOfMonth.toString(),
             date_end: endOfMonth.toString()
         }
@@ -93,7 +89,6 @@ export default function Home() {
 
         const props = {
             url: '/cash-registers/report/cash-on-hand',
-            authorization
         }
 
         const data = await listService(props);
@@ -161,3 +156,20 @@ export default function Home() {
         </div>
     )
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const token = handleHaveToken(ctx)
+  
+    if (!token) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        }
+      }
+    }
+  
+    return {
+      props: {}
+    }
+  }

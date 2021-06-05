@@ -7,7 +7,7 @@ import { ListItem } from '../../components/listItem';
 import { Modal } from '../../components/modal';
 import { CashRegisterReducerInterface } from '../../store/cashRegister/model';
 import { UserReducerInterface } from '../../store/user/model';
-import { haveToken } from '../../services/auth';
+import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
 import {
     createService, deleteService, listService, updateService
@@ -26,14 +26,9 @@ import { CashRegisterGroupSimpleReducerInterface } from '../../store/cashRegiste
 import { Select } from '../../components/select';
 import { DatePicker, RangePicker } from '../../components/datePicker';
 import { MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { GetServerSideProps } from 'next';
 
 export default function CashRegister() {
-    useEffect(() => {
-        if(haveToken(userInfo)) {
-            getCashRegisterGroupList();
-        }
-    }, []);
-
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [total, setTotal] = useState(0);
@@ -48,11 +43,7 @@ export default function CashRegister() {
     const [form] = Form.useForm();
     const buttonRef = useRef(null)
     const dispatch = useDispatch();
-    const userInfo = useSelector(
-        (
-            state: { user: UserReducerInterface }
-        ) => state.user
-    );
+
     const cashRegisterInfo = useSelector(
         (
             state: { cashRegister: CashRegisterReducerInterface }
@@ -68,7 +59,10 @@ export default function CashRegister() {
         { label: 'Saida', value: 'out' },
     ]
     const url = '/cash-registers';
-    const authorization = userInfo.token;
+
+    useEffect(() => {
+        getCashRegisterGroupList();
+    }, []);
 
     useEffect(() => {
         getCashRegisterList();
@@ -81,7 +75,6 @@ export default function CashRegister() {
             url,
             limit,
             page,
-            authorization,
             description: null,
             date_start: null,
             date_end: null,
@@ -99,7 +92,7 @@ export default function CashRegister() {
 
         const data = await listService(props);
 
-        if(data.ok) {
+        if (data.ok) {
             const { rows, count } = data;
 
             dispatch(cashRegisterUpdateList(rows));
@@ -114,12 +107,11 @@ export default function CashRegister() {
 
         const props = {
             url: '/cash-register-groups/list-simple',
-            authorization
         }
 
         const data = await listService(props);
 
-        if(data.ok) {
+        if (data.ok) {
             const { rows, count } = data;
 
             dispatch(cashRegisterGroupSimpleUpdateList(rows));
@@ -138,7 +130,6 @@ export default function CashRegister() {
                 id: seletedUpdate,
                 url,
                 values,
-                authorization
             });
 
             noErrors = ok;
@@ -149,7 +140,6 @@ export default function CashRegister() {
             const { ok } = await createService({
                 url,
                 values,
-                authorization
             });
 
             noErrors = ok;
@@ -195,7 +185,6 @@ export default function CashRegister() {
         const { ok } = await deleteService({
             id,
             url,
-            authorization
         });
 
         dispatch(cashRegisterStopDeleteLoading(index));
@@ -251,8 +240,8 @@ export default function CashRegister() {
                             Buscar
                         </ButtonPrimary>
 
-                            <ButtonPrimary onClick={() => setShowModal(true)}>
-                                Novo
+                        <ButtonPrimary onClick={() => setShowModal(true)}>
+                            Novo
                         </ButtonPrimary>
                     </div>
                 </div>
@@ -271,8 +260,8 @@ export default function CashRegister() {
                                     onDelete={() => handleDeleteCashRegister(index)}
                                     onDeleteLoad={item.loadingDelete}
                                     icon={
-                                        item.type === 'in' 
-                                            ? <PlusCircleOutlined /> 
+                                        item.type === 'in'
+                                            ? <PlusCircleOutlined />
                                             : <MinusCircleOutlined />
                                     }
                                 />
@@ -366,4 +355,21 @@ export default function CashRegister() {
             </Modal>
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const token = handleHaveToken(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}
+    }
 }
