@@ -6,14 +6,17 @@ interface Props {
   description: string;
   type: 'success' | 'error' | 'warning' | 'info';
   statusCode?: number;
+  validationToken: boolean;
 }
 
 export const Notification = (props: Props) => {
-    const unauthorizedMessage = handleUnauthorized(props.statusCode);
-    
-    return notification[props.type]({
-      message: props.message,
-      description: unauthorizedMessage || props.description,
-      duration: 5
-    });
+  let unauthorizedMessage = null;
+
+  if (props.validationToken) unauthorizedMessage = handleUnauthorized(props.statusCode);
+
+  return notification[props.type]({
+    message: props.message,
+    description: unauthorizedMessage || props.description,
+    duration: 5
+  });
 }

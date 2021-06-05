@@ -10,7 +10,7 @@ import { UserReducerInterface } from '../../store/user/model';
 import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
 import {
-    createService, deleteService, listService, updateService
+    postService, deleteService, getService, putService
 } from '../../services/apiRequest';
 import {
     cashRegisterStartDeleteLoading, cashRegisterStartListLoading,
@@ -90,9 +90,9 @@ export default function CashRegister() {
             props.cash_register_group_id = cashRegisterGroupSearch;
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             const { rows, count } = data;
 
             dispatch(cashRegisterUpdateList(rows));
@@ -109,9 +109,9 @@ export default function CashRegister() {
             url: '/cash-register-groups/list-simple',
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             const { rows, count } = data;
 
             dispatch(cashRegisterGroupSimpleUpdateList(rows));
@@ -126,7 +126,7 @@ export default function CashRegister() {
         let noErrors = false;
 
         if (seletedUpdate !== '') {
-            const { ok } = await updateService({
+            const { ok } = await putService({
                 id: seletedUpdate,
                 url,
                 values,
@@ -137,7 +137,7 @@ export default function CashRegister() {
         else {
             values.paid_in = new Date(values.paid_in);
 
-            const { ok } = await createService({
+            const { ok } = await postService({
                 url,
                 values,
             });

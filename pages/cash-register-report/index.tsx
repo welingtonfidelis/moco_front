@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
 import { Input } from '../../components/input';
-import { UserReducerInterface } from '../../store/user/model';
 import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
-import { downloadFileBufferService, listService } from '../../services/apiRequest';
+import { downloadFileBufferService, getService } from '../../services/apiRequest';
 import {
     cashRegisterGroupSimpleStartListLoading, cashRegisterGroupSimpleStopListLoading,
     cashRegisterGroupSimpleUpdateList
@@ -69,30 +68,30 @@ export default function CashRegisterReport() {
         {
             title: 'Tipo',
             dataIndex: 'type',
-            // sorter: (a, b) => a.type.length - b.type.length,
-            // sortDirections: ['descend'],
+            sorter: (a, b) => a.type.length - b.type.length,
+            sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Descrição',
             dataIndex: 'description',
-            // sorter: (a, b) => a.description.length - b.description.length,
-            // sortDirections: ['descend'],
+            sorter: (a, b) => a.description.length - b.description.length,
+            sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Grupo',
             dataIndex: 'cash_register_group_description',
-            // sorter: (a, b) => a.group.length - b.group.length,
-            // sortDirections: ['descend'],
+            sorter: (a, b) => a.cash_register_group_description.length - b.cash_register_group_description.length,
+            sortDirections: ['ascend', 'descend', 'ascend'],
         },
         {
             title: 'Valor',
             dataIndex: 'value',
-            // defaultSortOrder: 'descend',
-            // sorter: (a, b) => a.value - b.value,
+            sorter: (a, b) => a.value - b.value,
         },
         {
             title: 'Data',
             dataIndex: 'paid_in',
+            sorter: (a, b) => moment(a.paid_in).unix() - moment(b.paid_in).unix()
         },
     ];
 
@@ -133,9 +132,9 @@ export default function CashRegisterReport() {
         const url = '/cash-registers/report';
         const props = mountRequestProps(url);
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             dispatch(cashRegisterReportUpdateList({
                 loadingList: false,
                 date_end: data.date_end,
@@ -173,9 +172,9 @@ export default function CashRegisterReport() {
             url: '/cash-register-groups/list-simple',
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             const { rows } = data;
 
             dispatch(cashRegisterGroupSimpleUpdateList(rows));
@@ -191,9 +190,9 @@ export default function CashRegisterReport() {
             url: '/cash-registers/report/cash-on-hand',
         }
 
-        const data = await listService(props);
+        const { ok, data } = await getService(props);
 
-        if (data.ok) {
+        if (ok) {
             const { total } = data;
             dispatch(cashOnHandUpdateValue(total));
         }

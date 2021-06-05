@@ -1,8 +1,25 @@
 import { Notification } from "../components/notification";
 import { api } from "./api";
 
+const DEFAULT_SUCCESS_MESSAGE = {
+    title: 'Sucesso!',
+    message: 'Requisição efetuada com sucesso.'
+}
+const DEFAULT_ERROR_MESSAGE = {
+    title: 'Falha!',
+    message: 'Houve um erro ao executar esta ação, por favor, tente novamente.'
+}
+
+interface NotificationMessage {
+    title: string;
+    message: string;
+}
+
 interface RequestInterface {
     url: string;
+    errorMessage?:NotificationMessage;
+    successMessage?:NotificationMessage;
+    validationToken?: boolean;
 }
 
 interface ListInterface extends RequestInterface {
@@ -29,18 +46,11 @@ interface DeleteInterface extends RequestInterface {
 
 interface ResponseDataInterface {
     ok: boolean;
-    count?: number;
-    rows?: Array<any>;
-    date_start?: Date;
-    date_end?: Date;
-    revenue?: number;
-    expense?: number;
-    profit?: number;
-    total?: number;
+    data: any;
 }
 
-export const listService = async (props: ListInterface) => {
-    const returnedValues: ResponseDataInterface = { ok: false }
+export const getService = async (props: ListInterface) => {
+    const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     const url = props.url;
 
@@ -57,17 +67,19 @@ export const listService = async (props: ListInterface) => {
         const { data: dataResponse } = response;
         const { data } = dataResponse;
 
-        Object.assign(returnedValues, { ok: true, ...data })
+        returnedValues.ok = true;
+        returnedValues.data = data;
 
     } catch (error) {
-        const message = 'Erro ao trazer a lista.'
-        const description = 'Houve um problema ao trazer esta lista. Por favor, tente novamente.';
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
 
         Notification({
             type: 'error',
             message,
             description,
-            statusCode: error?.response?.status
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
         });
     } finally {
         return returnedValues;
@@ -103,22 +115,33 @@ export const downloadFileBufferService = async (props: ListInterface, fileName: 
         document.body.appendChild(link);
         link.click();
         link.remove();
+
+        const message = props.successMessage?.title || DEFAULT_SUCCESS_MESSAGE.title;
+        const description = props.successMessage?.message || DEFAULT_SUCCESS_MESSAGE.message;
+
+        Notification({
+            type: 'success',
+            message,
+            description,
+            validationToken: false
+        });
         
     } catch (error) {
-        const message = 'Erro ao baixar o arquivo.'
-        const description = 'Houve um problema ao baixar este arquivo. Por favor, tente novamente.';
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
 
         Notification({
             type: 'error',
             message,
             description,
-            statusCode: error?.response?.status
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
         });
     }
 }
 
-export const createService = async (props: CreateInterface) => {
-    const returnedValues = { ok: false, data: {} }
+export const postService = async (props: CreateInterface) => {
+    const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
         const response = await api.post(
@@ -132,28 +155,33 @@ export const createService = async (props: CreateInterface) => {
         returnedValues.data = data;
         returnedValues.ok = true;
 
+        const message = props.successMessage?.title || DEFAULT_SUCCESS_MESSAGE.title;
+        const description = props.successMessage?.message || DEFAULT_SUCCESS_MESSAGE.message;
+
         Notification({
             type: 'success',
-            message: 'Salvo.',
-            description: 'Informação salva com sucesso.'
+            message,
+            description,
+            validationToken: false
         });
     } catch (error) {
-        const message = 'Erro ao salvar informação.'
-        const description = 'Houve um problema ao salvar esta informação. Por favor, tente novamente.';
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
 
         Notification({
             type: 'error',
             message,
             description,
-            statusCode: error?.response?.status
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
         });
     } finally {
         return returnedValues;
     }
 }
 
-export const updateService = async (props: UpdateInterface) => {
-    const returnedValues = { ok: false, data: {} }
+export const putService = async (props: UpdateInterface) => {
+    const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
         const response = await api.put(
@@ -167,20 +195,65 @@ export const updateService = async (props: UpdateInterface) => {
         returnedValues.data = data;
         returnedValues.ok = true;
 
+        const message = props.successMessage?.title || DEFAULT_SUCCESS_MESSAGE.title;
+        const description = props.successMessage?.message || DEFAULT_SUCCESS_MESSAGE.message;
+
         Notification({
             type: 'success',
-            message: 'Salvo.',
-            description: 'Informação salva com sucesso.'
+            message,
+            description,
+            validationToken: false
         });
     } catch (error) {
-        const message = 'Erro ao salvar informação.'
-        const description = 'Houve um problema ao salvar esta informação. Por favor, tente novamente.';
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
 
         Notification({
             type: 'error',
             message,
             description,
-            statusCode: error?.response?.status
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
+        });
+    } finally {
+        return returnedValues;
+    }
+}
+
+export const patchService = async (props: UpdateInterface) => {
+    const returnedValues: ResponseDataInterface = { ok: false, data: {} }
+
+    try {
+        const response = await api.patch(
+            `${props.url}/${props.id}`,
+            props.values,
+        );
+
+        const { data: dataResponse } = response;
+        const { data } = dataResponse;
+
+        returnedValues.data = data;
+        returnedValues.ok = true;
+
+        const message = props.successMessage?.title || DEFAULT_SUCCESS_MESSAGE.title;
+        const description = props.successMessage?.message || DEFAULT_SUCCESS_MESSAGE.message;
+
+        Notification({
+            type: 'success',
+            message,
+            description,
+            validationToken: false
+        });
+    } catch (error) {
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
+
+        Notification({
+            type: 'error',
+            message,
+            description,
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
         });
     } finally {
         return returnedValues;
@@ -188,7 +261,7 @@ export const updateService = async (props: UpdateInterface) => {
 }
 
 export const deleteService = async (props: DeleteInterface) => {
-    const returnedValues = { ok: false, data: {} }
+    const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
         const response = await api.delete(
@@ -201,21 +274,26 @@ export const deleteService = async (props: DeleteInterface) => {
         returnedValues.data = data;
         returnedValues.ok = true;
 
+        const message = props.successMessage?.title || DEFAULT_SUCCESS_MESSAGE.title;
+        const description = props.successMessage?.message || DEFAULT_SUCCESS_MESSAGE.message;
+
         Notification({
             type: 'success',
-            message: 'Excluído.',
-            description: 'Informação excluida com sucesso.'
+            message,
+            description,
+            validationToken: false
         });
 
     } catch (error) {
-        const message = 'Erro ao excluir informação.'
-        const description = 'Houve um problema ao excluir esta informação. Por favor, tente novamente.';
+        const message = props.errorMessage?.title || DEFAULT_ERROR_MESSAGE.title;
+        const description = props.errorMessage?.message || DEFAULT_ERROR_MESSAGE.message;
 
         Notification({
             type: 'error',
             message,
             description,
-            statusCode: error?.response?.status
+            statusCode: error?.response?.status,
+            validationToken: props.validationToken ?? true
         });
     } finally {
         return returnedValues;

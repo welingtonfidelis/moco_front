@@ -8,7 +8,7 @@ import { Modal } from '../../components/modal';
 import { CashRegisterGroupReducerInterface } from '../../store/cashRegisterGroup/model';
 import { handleHaveToken } from '../../services/auth';
 import {
-    createService, deleteService, listService, updateService 
+    postService, deleteService, getService, putService 
 } from '../../services/apiRequest';
 import {
     cashRegisterGroupStartListLoading, cashRegisterGroupStopListLoading, 
@@ -52,8 +52,8 @@ export default function CashRegisterGroup() {
 
         if(descriptionSearch.length > 2) props.description = descriptionSearch;
 
-        const data = await listService(props);
-        if(data.ok) {
+        const { ok, data } = await getService(props);
+        if(ok) {
             const { rows, count } = data;
 
             dispatch(cashRegisterGroupUpdateList(rows));
@@ -69,7 +69,7 @@ export default function CashRegisterGroup() {
         let noErrors = false;
 
         if (seletedUpdate !== '') {
-           const { ok } = await updateService({
+           const { ok } = await putService({
                 id: seletedUpdate,
                 url,
                 values,
@@ -78,7 +78,7 @@ export default function CashRegisterGroup() {
             noErrors = ok;
         }
         else {
-            const { ok } = await createService({
+            const { ok } = await postService({
                 url,
                 values,
             });
