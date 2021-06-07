@@ -154,6 +154,14 @@ export default function Home() {
             validationToken: false
         });
 
+        if(ok) {
+            formProfilePassword.setFieldsValue({
+                old_password: null,
+                new_password: null,
+                confirm_password: null,
+            });
+        }
+
         dispatch(userStopProfileLoading());
     }
 
@@ -289,7 +297,7 @@ export default function Home() {
 
                 <div className="profile-password">
                     <Collapse accordion>
-                        <Collapse.Panel header="Alterar Senha" key="2">
+                        <Collapse.Panel header="Alterar Senha" key="1">
                             <Form
                                 onFinish={handleSavePassword}
                                 form={formProfilePassword}
