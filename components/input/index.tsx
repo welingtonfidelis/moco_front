@@ -1,9 +1,13 @@
 import { Input as InputAntd, InputProps } from 'antd';
 import { SearchProps, TextAreaProps } from 'antd/lib/input';
+import InputMaskAntd from 'react-input-mask';
 
 interface Props extends InputProps {}
 interface InputSearchProps extends SearchProps {}
 interface InputTextArea extends TextAreaProps {}
+interface PropsMask extends InputProps {
+    mask: string;
+}
 
 export const Input: React.FC<Props> = (props) => (
     <InputAntd
@@ -39,4 +43,10 @@ export const InputTextArea: React.FC<InputTextArea> = (props) => (
         rows={5}
         {...props}
     />
+)
+
+export const InputMask: React.FC<PropsMask> = (props) => (
+    <InputMaskAntd mask={props.mask} {...props}>
+        {(inputProps) => <Input {...inputProps} />}
+    </InputMaskAntd>
 )

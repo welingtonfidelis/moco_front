@@ -22,12 +22,13 @@ export default function ResetPassword() {
     api.defaults.headers.Authorization = Router.query.token;
 
     const { ok } = await patchService({
-      url: '/users/profile/update-password',
+      url: '/users/profile/update-reseted-password',
       id: '',
       values: { password: values.password },
       errorMessage: {
         title: 'Falha!',
-        message: 'Houve um erro ao efetuar a mudança de senha. Por favor, tente novamente.'
+        message: 'Houve um problema ao atualizar sua senha. Por favor, '+
+        'confirme se a nova possui mínimo de 4 dígitos e tente novamente.'
       },
       successMessage: {
         title: 'Sucesso!',
@@ -46,21 +47,21 @@ export default function ResetPassword() {
   }
 
   return (
-    <div id="reset-password-page">
+    <div id="change-password-page">
       <main>
         <img src="/assets/images/logo_transparent.png" alt="Logo" />
 
         <strong>
-          Vamos recuperar sua senha.
+          Vamos trocar sua senha.
           <br />
-          Insira seu usuário ou email abaixo.
+          Insira sua nova senha e confirme-a abaixo.
         </strong>
 
         <Form
           onFinish={handleChangePassword}
         >
           <Form.Item
-            name="password"
+            name="new_password"
             rules={[{ required: true, message: "Insira sua nova senha" }]}
           >
             <InputPassword
