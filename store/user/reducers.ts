@@ -1,11 +1,18 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { LOGIN, LOGOUT, START_LOGIN_LOAD, STOP_LOGIN_LOAD, UPDATE_TOKEN } from "./types";
+import { LOGIN, LOGOUT, START_LOGIN_LOAD, START_PROFILE_LOAD, STOP_LOGIN_LOAD, STOP_PROFILE_LOAD, UPDATE_PROFILE, UPDATE_TOKEN } from "./types";
 
 const initialState = {
     name: null,
     email: null,
     token: null,
+    user: null,
+    ongName: null,
+    phone: null,
+    birth: null,
+    address: null,
+
     loadingLogin: false,
+    loadingProfile: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -42,6 +49,21 @@ const reducer = (state = initialState, action) => {
             localStorage.setItem('moco_user_token', action.payload.token);
 
             const newState = { ...state, token: action.payload }
+            return newState;
+        }
+
+        case START_PROFILE_LOAD: {
+            const newState = { ...state, loadingProfile: true }
+            return newState;
+        }
+
+        case STOP_PROFILE_LOAD: {
+            const newState = { ...state, loadingProfile: false }
+            return newState;
+        }
+
+        case UPDATE_PROFILE: {
+            const newState = { ...state, ...action.payload }
             return newState;
         }
 

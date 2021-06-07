@@ -1,5 +1,5 @@
 import { Spin, Pagination, Empty, Form, Radio } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
 import { Input, InputTextArea } from '../../components/input';
@@ -38,7 +38,6 @@ export default function CashRegister() {
     const [showModal, setShowModal] = useState(false);
 
     const [form] = Form.useForm();
-    const buttonRef = useRef(null)
     const dispatch = useDispatch();
 
     const cashRegisterInfo = useSelector(
@@ -280,7 +279,7 @@ export default function CashRegister() {
             <Modal
                 title="Novo registro de caixa"
                 isVisible={showModal}
-                onOk={() => { buttonRef.current.click() }}
+                onOk={() => { form.submit() }}
                 onCancel={handleClearForm}
                 confirmLoading={cashRegisterInfo.loadingSave}
             >
@@ -346,8 +345,6 @@ export default function CashRegister() {
                             placeholder="Observação"
                         />
                     </Form.Item>
-
-                    <button ref={buttonRef} type="submit" hidden />
                 </Form>
             </Modal>
         </div>

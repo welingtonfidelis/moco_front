@@ -9,6 +9,7 @@ import '../styles/globals.css';
 import '../styles/chart.css';
 import '../styles/login.css';
 import '../styles/resetPassword.css';
+import '../styles/changePassword.css';
 import '../styles/main.css';
 import '../styles/cashRegisterGroup.css';
 import '../styles/cashRegister.css';

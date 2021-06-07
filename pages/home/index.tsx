@@ -82,6 +82,7 @@ export default function Home() {
             }));
         }
     }
+    
     const getCashOnHandValue = async () => {
         dispatch(cashOnHandStartLoading());
 
