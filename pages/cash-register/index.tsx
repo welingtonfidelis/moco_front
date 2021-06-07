@@ -6,8 +6,6 @@ import { Input, InputTextArea } from '../../components/input';
 import { ListItem } from '../../components/listItem';
 import { Modal } from '../../components/modal';
 import { CashRegisterReducerInterface } from '../../store/cashRegister/model';
-import { UserReducerInterface } from '../../store/user/model';
-import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
 import {
     postService, deleteService, getService, putService
@@ -26,7 +24,6 @@ import { CashRegisterGroupSimpleReducerInterface } from '../../store/cashRegiste
 import { Select } from '../../components/select';
 import { DatePicker, RangePicker } from '../../components/datePicker';
 import { MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { GetServerSideProps } from 'next';
 
 export default function CashRegister() {
     const [page, setPage] = useState(1);
@@ -355,21 +352,4 @@ export default function CashRegister() {
             </Modal>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = handleHaveToken(ctx);
-
-    if (!token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            }
-        }
-    }
-
-    return {
-        props: {}
-    }
 }
