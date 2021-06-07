@@ -1,6 +1,4 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { setCookie, destroyCookie } from 'nookies';
-import { api } from "../../services/api";
 import { LOGIN, LOGOUT, START_LOGIN_LOAD, STOP_LOGIN_LOAD, UPDATE_TOKEN } from "./types";
 
 const initialState = {
@@ -17,14 +15,14 @@ const reducer = (state = initialState, action) => {
         }
 
         case LOGIN: {
-            setCookie(undefined, 'moco_user_token', action.payload.token);
+            localStorage.setItem('moco_user_token', action.payload.token);
 
             const newState = { ...state, loadingLogin: false, ...action.payload }
             return newState;
         }
 
         case LOGOUT: {
-            destroyCookie(undefined, 'moco_user_token');
+            localStorage.removeItem('moco_user_token');
 
             const newState = { name: null, email: null, token: null }
             return newState;
@@ -41,6 +39,8 @@ const reducer = (state = initialState, action) => {
         }
 
         case UPDATE_TOKEN: {
+            localStorage.setItem('moco_user_token', action.payload.token);
+
             const newState = { ...state, token: action.payload }
             return newState;
         }

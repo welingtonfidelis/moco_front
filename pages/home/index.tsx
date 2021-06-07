@@ -1,11 +1,9 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarChart, PieChart } from '../../components/chart';
 import { getService } from '../../services/apiRequest';
-import { handleHaveToken } from '../../services/auth';
 import { 
     cashOnHandStartLoading, cashOnHandStopLoading, cashOnHandUpdateValue 
 } from '../../store/cashOnHand/actions';
@@ -156,20 +154,3 @@ export default function Home() {
         </div>
     )
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = handleHaveToken(ctx)
-  
-    if (!token) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        }
-      }
-    }
-  
-    return {
-      props: {}
-    }
-  }

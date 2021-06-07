@@ -15,8 +15,6 @@ import Router from "next/router";
 import { Modal } from "../../components/modal";
 import { Menu } from '../../components/menu';
 import { userLogout } from "../../store/user/actions";
-import { GetServerSideProps } from "next";
-import { handleHaveToken } from "../../services/auth";
 
 export default function Home() {
     const [selectedPage, setSelectedPage] = useState(<HomePage />);
@@ -108,21 +106,4 @@ export default function Home() {
             </Modal>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = handleHaveToken(ctx);
-
-    if (!token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            }
-        }
-    }
-
-    return {
-        props: {}
-    }
 }

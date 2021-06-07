@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '../../components/button';
 import { Input } from '../../components/input';
-import { handleHaveToken } from '../../services/auth';
 import moment from 'moment';
 import { downloadFileBufferService, getService } from '../../services/apiRequest';
 import {
@@ -27,7 +26,6 @@ import { CashRegisterReportDownlaodReducerInterface } from '../../store/cashRegi
 import {
     cashRegisterReportDownloadStartLoading, cashRegisterReportDownloadStopLoading
 } from '../../store/cashRegisterReportDownload/actions';
-import { GetServerSideProps } from 'next';
 
 export default function CashRegisterReport() {
     const [total, setTotal] = useState(0);
@@ -315,21 +313,4 @@ export default function CashRegisterReport() {
             </Spin>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = handleHaveToken(ctx);
-
-    if (!token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            }
-        }
-    }
-
-    return {
-        props: {}
-    }
 }

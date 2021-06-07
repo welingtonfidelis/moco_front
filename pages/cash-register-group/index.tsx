@@ -6,7 +6,6 @@ import { Input, InputSearch, InputTextArea } from '../../components/input';
 import { ListItem } from '../../components/listItem';
 import { Modal } from '../../components/modal';
 import { CashRegisterGroupReducerInterface } from '../../store/cashRegisterGroup/model';
-import { handleHaveToken } from '../../services/auth';
 import {
     postService, deleteService, getService, putService 
 } from '../../services/apiRequest';
@@ -16,7 +15,6 @@ import {
     cashRegisterGroupUpdateList, cashRegisterGroupStartDeleteLoading, 
     cashRegisterGroupStopDeleteLoading
 } from '../../store/cashRegisterGroup/actions';
-import { GetServerSideProps } from 'next';
 
 export default function CashRegisterGroup() {
     const [page, setPage] = useState(1);
@@ -210,21 +208,4 @@ export default function CashRegisterGroup() {
             </Modal>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = handleHaveToken(ctx);
-
-    if (!token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            }
-        }
-    }
-
-    return {
-        props: {}
-    }
 }
