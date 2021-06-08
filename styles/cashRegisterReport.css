@@ -63,6 +63,8 @@
 
 #cash-register-report-page .ant-table {
     border: 1px solid var(--color-text-base);
+    max-width: calc(100vw - 78px);
+    overflow: auto;
 }
 
 #cash-register-report-page .ant-table tr {

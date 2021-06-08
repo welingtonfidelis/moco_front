@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import Router from 'next/router'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, InputPassword } from '../components/input';
 import { ButtonPrimary } from '../components/button';
 import { UserOutlined } from '@ant-design/icons';
 import { 
-  userLogin, userStartLoginLoading, userStopLoginLoading 
+  userLogin, userLogout, userStartLoginLoading, userStopLoginLoading 
 } from '../store/user/actions';
 import { Form } from 'antd';
 import { UserReducerInterface } from '../store/user/model';
@@ -16,7 +16,11 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const dispatch = useDispatch();
-  const loginInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
+  const userInfo = useSelector((state: { user: UserReducerInterface }) => state.user);
+
+  useEffect(() => {
+    dispatch(userLogout());
+  }, []);
 
   const handleLogin = async (values: any) => {
       dispatch(userStartLoginLoading());
@@ -95,7 +99,7 @@ export default function Home() {
 
           <ButtonPrimary
             htmlType="submit"
-            loading={loginInfo.loadingLogin}
+            loading={userInfo.loadingLogin}
           >
             Entrar
             </ButtonPrimary>
@@ -103,7 +107,7 @@ export default function Home() {
 
         <a onClick={() => Router.push('/reset-password')}>Esqueci minha senha</a>
 
-        <a href="#">Não tenho cadastro</a>
+        <a onClick={() => Router.push('/contact')}>Não tenho cadastro</a>
       </main>
 
       <footer>
@@ -114,7 +118,7 @@ export default function Home() {
         >
           Powered by{' '}
           <span>
-            Construido por Welington Fidelis de Sousa
+            Welington Fidelis de Sousa
           </span>
         </a> */}
       </footer>

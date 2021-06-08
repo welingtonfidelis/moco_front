@@ -41,6 +41,10 @@
     font-size: 1.9rem;
 }
 
+#main-page main .ant-menu-item-selected {
+    background-color: var(--color-card-light);
+}
+
 #main-page main .page-container {
     flex-grow: 1;
 }

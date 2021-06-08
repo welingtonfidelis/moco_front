@@ -5,6 +5,7 @@ import {
     HomeOutlined, DollarCircleOutlined,
     SnippetsOutlined, BarChartOutlined,
     UserOutlined, LogoutOutlined, LoadingOutlined,
+    MailOutlined,
 } from '@ant-design/icons';
 
 import HomePage from '../home';
@@ -14,7 +15,10 @@ import CashRegisterReportPage from '../cash-register-report';
 import Router from "next/router";
 import { Modal } from "../../components/modal";
 import { Menu } from '../../components/menu';
-import { userLogout, userStartProfileLoading, userStopProfileLoading, userUpdateProfile } from "../../store/user/actions";
+import { 
+    userLogout, userStartProfileLoading, userStopProfileLoading, 
+    userUpdateProfile 
+} from "../../store/user/actions";
 import { DatePicker } from "../../components/datePicker";
 import { Input, InputMask, InputPassword, InputTextArea } from "../../components/input";
 import { getService, patchService } from "../../services/apiRequest";
@@ -89,6 +93,11 @@ export default function Home() {
             action: () => handleOpenProfile(),
         },
         {
+            title: 'Suporte',
+            icon: <MailOutlined />,
+            action: () => Router.push('/contact'),
+        },
+        {
             title: 'Sair do sistema',
             icon: <LogoutOutlined />,
             action: () => setShowModal(true),
@@ -145,8 +154,12 @@ export default function Home() {
                 old_password: values.old_password,
                 new_password: values.new_password,
             },
+            successMessage: {
+                title: 'Sucesso!',
+                message: 'Sua senha foi atualizada com sucesso.'
+            },
             errorMessage: {
-                title: 'Falha',
+                title: 'Falha!',
                 message: 'Houve um problema ao atualizar sua senha. Por favor, '+
                 'confirme se sua senha atual está correta, se a nova possui mínimo de '+
                 '4 dígitos e tente novamente.',

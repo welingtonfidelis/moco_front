@@ -31,7 +31,16 @@ const reducer = (state = initialState, action) => {
         case LOGOUT: {
             localStorage.removeItem('moco_user_token');
 
-            const newState = { name: null, email: null, token: null }
+            const newState = {
+                name: null,
+                email: null,
+                token: null,
+                user: null,
+                ongName: null,
+                phone: null,
+                birth: null,
+                address: null,
+            }
             return newState;
         }
 
