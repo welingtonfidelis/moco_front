@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Button, Collapse, Dropdown, Form } from 'antd';
+import { Avatar, Button, Collapse, Dropdown, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     HomeOutlined, DollarCircleOutlined,
@@ -184,6 +184,7 @@ export default function Home() {
                 <img src="/assets/images/logo_transparent.png" alt="Logo" />
 
                 <Dropdown
+                    trigger={['click']}
                     overlay={(
                         <Menu
                             items={userMenuOptions}

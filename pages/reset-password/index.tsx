@@ -83,7 +83,9 @@ export default function ResetPassword() {
             </ButtonPrimary>
         </Form>
 
-        <a onClick={() => Router.back()}>Voltar para login</a>
+        <a onClick={() => Router.back()}>
+          Voltar para o login
+        </a>
       </main>
     </div>
   )
