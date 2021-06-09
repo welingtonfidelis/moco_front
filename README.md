@@ -1,34 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Lib_quality
+Este é o front ([Backend] aqui) de um projeto que tem o objetivo de atender necessidades no controle de caixa, como cadastrar, listar e gerar relatório sobre movimentação em períodos específicos. Este front foi construído utilzando [Next.js] e [Typescript].
 
-## Getting Started
+## Apresentação
+Abaixo algumas telas do projeto.
 
-First, run the development server:
+<img src="./docs/moco_front_3.png" alt="drawing" style="height:500px;"/>
+<img src="./docs/moco_front_5.png" alt="drawing" style="height:500px;"/>
+<img src="./docs/moco_front_9.png" alt="drawing" style="height:500px;"/>
 
-```bash
-npm run dev
-# or
-yarn dev
+## Requisitos
+- [Node.js] - Node.js na versão 14 ou superior;
+- [Backend] - É necessário ter em execução a API deste projeto;
+
+## Instalação
+Após clonar este projeto, crie um arquivo chamado **.env** no diretório raíz, usando como referência o arquivo .env.example localizado no diretório citado. Em seguinda, em seu terminal de comandos, execute *npm install* para instalas as dependências e em seguida, *npm run dev* para que o projeto seja executado.
+
+## Utilização
+É possíve acessar o projeto em execução atráves do endereço **http://localhost:3000** e, considerando que seguiu os passos iniciais para execução do [Backend], pode efetuar o login com as informações abaixo:
+
+```json
+{
+    "user": "admmaster",
+    "password": "1234"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contato
+welingtonfidelis@gmail.com
+<br>
+Sugestões e pull requests são sempre bem vindos 🤓 
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+License
+----
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+MIT
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+**Free Software, Hell Yeah!**
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[GitHub_API]: <https://docs.github.com/en/rest>
+[Node.js]: <https://nodejs.org/en/>
+[TypeScript]: <https://www.typescriptlang.org/>
+[Next.js]: <https://nextjs.org/>
+[Backend]: <https://github.com/welingtonfidelis/moco_api>
