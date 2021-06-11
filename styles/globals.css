@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import url('~antd/dist/antd.css');
+@import url('https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css');
 
 :root {
   font-size: 60%;
@@ -41,7 +43,7 @@ body {
 } */
 
 body, input, button, textarea {
-  font: 500 1.6rem Roboto;
+  font: 500 1.6rem Roboto, sans-serif;
   color: var(--color-text-base);
 }
 

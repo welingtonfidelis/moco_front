@@ -1,6 +1,6 @@
-import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
-
+import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 interface Props {
     key: number;
     title: string;
@@ -28,7 +28,7 @@ export const ListItem: React.FC<Props> = (props) => (
         </div>
 
         <div className="list-item-action">
-            <EditOutlined title="Editar" onClick={props.onEdit}/>
+            <FaPencilAlt title="Editar" onClick={props.onEdit}/>
 
             <Popconfirm 
                 placement="left" 
@@ -37,7 +37,7 @@ export const ListItem: React.FC<Props> = (props) => (
                 okText="Sim" 
                 cancelText="Não"
             >
-                { props.onDeleteLoad ? <LoadingOutlined /> : <DeleteFilled title="Excluir"/> }
+                { props.onDeleteLoad ? <LoadingOutlined /> : <FaTrashAlt title="Excluir"/> }
             </Popconfirm> 
         </div>
     </div>

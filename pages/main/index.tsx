@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Avatar, Button, Collapse, Dropdown, Form } from 'antd';
+import { Button, Collapse, Dropdown, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     HomeOutlined, DollarCircleOutlined,
@@ -7,6 +7,7 @@ import {
     UserOutlined, LogoutOutlined, LoadingOutlined,
     MailOutlined,
 } from '@ant-design/icons';
+import { FaUserCircle } from 'react-icons/fa';
 
 import HomePage from '../home';
 import CashRegisterPage from '../cash-register';
@@ -191,11 +192,11 @@ export default function Home() {
                         />
                     )}
                 >
-                    <Button shape="circle" >
+                    <Button shape="circle">
                         {
                             userInfo.loadingProfile
                                 ? <LoadingOutlined />
-                                : <UserOutlined />
+                                : <FaUserCircle />
                         }
                     </Button>
                 </Dropdown>

@@ -1,5 +1,9 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { LOGIN, LOGOUT, START_LOGIN_LOAD, START_PROFILE_LOAD, STOP_LOGIN_LOAD, STOP_PROFILE_LOAD, UPDATE_PROFILE, UPDATE_TOKEN } from "./types";
+import { LOCAL_STORAGE_ENUM } from "../../components/enums/localStorage";
+import { 
+    LOGIN, LOGOUT, START_LOGIN_LOAD, START_PROFILE_LOAD, 
+    STOP_LOGIN_LOAD, STOP_PROFILE_LOAD, UPDATE_PROFILE, UPDATE_TOKEN 
+} from "./types";
 
 const initialState = {
     name: null,
@@ -22,14 +26,14 @@ const reducer = (state = initialState, action) => {
         }
 
         case LOGIN: {
-            localStorage.setItem('moco_user_token', action.payload.token);
+            localStorage.setItem(LOCAL_STORAGE_ENUM.TOKEN, action.payload.token);
 
             const newState = { ...state, loadingLogin: false, ...action.payload }
             return newState;
         }
 
         case LOGOUT: {
-            localStorage.removeItem('moco_user_token');
+            localStorage.removeItem(LOCAL_STORAGE_ENUM.TOKEN);
 
             const newState = {
                 name: null,
@@ -55,7 +59,7 @@ const reducer = (state = initialState, action) => {
         }
 
         case UPDATE_TOKEN: {
-            localStorage.setItem('moco_user_token', action.payload.token);
+            localStorage.setItem(LOCAL_STORAGE_ENUM.TOKEN, action.payload.token);
 
             const newState = { ...state, token: action.payload }
             return newState;

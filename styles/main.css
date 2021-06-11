@@ -19,6 +19,24 @@
     height: 60px;
 }
 
+#main-page header button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-page header button svg {
+    font-size: 2.8rem;
+    color: var(--color-title-primary);
+    filter: grayscale(.9);
+    transition: .5s;
+
+}
+
+#main-page header button svg:hover {
+    filter: grayscale(.0);
+}
+
 #main-page main {
     display: flex;
     flex-grow: 1;

@@ -56,19 +56,22 @@
     margin-left: 12px;
 }
 
-.list-item-action span {
+.list-item-action svg {
     font-size: 1.9rem;
     margin-left: 10px;
     transition: .5s;
 }
 
-.list-item-action span:not(:first-child) {
-    color: var(--color-text-error);
+.list-item-action svg:hover {
+    cursor: pointer;
 }
 
-.list-item-action span:hover {
-    filter: brightness(.6);
-    cursor: pointer;
+.list-item-action svg:hover {
+    color: var(--color-tertiary);
+}
+
+.list-item-action svg:not(:first-child):hover {
+    color: var(--color-text-error);
 }
 
 @media (max-width: 600px) {

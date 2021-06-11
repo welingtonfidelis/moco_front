@@ -174,6 +174,8 @@ export default function CashRegister() {
     }
 
     const handleDeleteCashRegister = async (index: number) => {
+        console.log(index, cashRegisterInfo.list[index]);
+        
         dispatch(cashRegisterStartDeleteLoading(index));
 
         const { id } = cashRegisterInfo.list[index];

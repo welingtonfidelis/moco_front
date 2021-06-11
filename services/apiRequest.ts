@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_ENUM } from "../components/enums/localStorage";
 import { Notification } from "../components/notification";
 import { api } from './api';
 
@@ -57,7 +58,7 @@ export const getService = async (props: ListInterface) => {
     delete props.url;
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.get(
             url,
             {
@@ -94,7 +95,7 @@ export const downloadFileBufferService = async (props: ListInterface, fileName: 
     delete props.url;
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.get(
             url,
             {
@@ -148,7 +149,7 @@ export const postService = async (props: CreateInterface) => {
     const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.post(
             props.url,
             props.values,
@@ -192,7 +193,7 @@ export const putService = async (props: UpdateInterface) => {
     const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.put(
             `${props.url}/${props.id}`,
             props.values,
@@ -236,7 +237,7 @@ export const patchService = async (props: UpdateInterface) => {
     const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.patch(
             `${props.url}/${props.id}`,
             props.values,
@@ -280,11 +281,11 @@ export const deleteService = async (props: DeleteInterface) => {
     const returnedValues: ResponseDataInterface = { ok: false, data: {} }
 
     try {
-        const Authorization = localStorage.getItem('moco_user_token');
+        const Authorization = getAuthorization();
         const response = await api.delete(
             `${props.url}/${props.id}`,
             {
-                headers: Authorization 
+                headers: { Authorization } 
             }
         );
 
@@ -318,4 +319,8 @@ export const deleteService = async (props: DeleteInterface) => {
     } finally {
         return returnedValues;
     }
+}
+
+const getAuthorization = () => {
+    return localStorage.getItem(LOCAL_STORAGE_ENUM.TOKEN);
 }
