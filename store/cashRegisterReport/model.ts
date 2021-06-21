@@ -12,7 +12,6 @@ export interface CashRegisterReportReducerInterface {
     loadingList: boolean;
     expense: number;
     revenue: number;
-    profit: number;
     date_start: Date;
     date_end: Date;
     list: CashRegisterReportItemReducerInterface[];

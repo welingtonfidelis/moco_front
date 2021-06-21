@@ -138,7 +138,6 @@ export default function CashRegisterReport() {
                 date_end: data.date_end,
                 date_start: data.date_start,
                 expense: data.expense,
-                profit: data.profit,
                 revenue: data.revenue,
                 list: data.rows.map((item, index) => {
                     const type = item.type === 'in' ? 'Entrada' : 'Saida';
@@ -289,11 +288,6 @@ export default function CashRegisterReport() {
                         <div className="col">
                             <strong>Despesas: </strong>
                             <span>{maskValue(cashRegisterReportInfo.expense)}</span>
-                        </div>
-
-                        <div className="col">
-                            <strong>Lucro: </strong>
-                            <span>{maskValue(cashRegisterReportInfo.profit)}</span>
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ export default function Home() {
     );
     const pieData = {
         labels: ['Entrada', 'Saída'],
-        series: [cashRegisterReportInfo.profit, cashRegisterReportInfo.expense]
+        series: [cashRegisterReportInfo.revenue, cashRegisterReportInfo.expense]
     }
 
     const barDataIn = {
@@ -72,7 +72,6 @@ export default function Home() {
                 date_end: data.date_end,
                 date_start: data.date_start,
                 expense: data.expense,
-                profit: data.profit,
                 revenue: data.revenue,
                 list: data.rows.map((item, index) => {
                     const paid_in = maskDate(new Date(item.paid_in));
@@ -109,10 +108,9 @@ export default function Home() {
                     <strong>Registros do mês de {actualMonthName}</strong>
 
                     <div className="home-cash-register-resume">
+                        <span>Receitas: {maskValue(cashRegisterReportInfo.revenue)}</span>
+                        <span>Despesas: {maskValue(cashRegisterReportInfo.expense)}</span>
                         <span>Total em caixa: {maskValue(cashOnHandInfo.value)}</span>
-                        <span>Receitas do mês: {maskValue(cashRegisterReportInfo.revenue)}</span>
-                        <span>Despesas do mês: {maskValue(cashRegisterReportInfo.expense)}</span>
-                        <span>Lucro do mês: {maskValue(cashRegisterReportInfo.profit)}</span>
                     </div>
                 </div>
 
